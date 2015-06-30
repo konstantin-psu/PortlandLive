@@ -2,10 +2,24 @@ package edu.pdx.konstan2.trimetlive;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class mapActivity extends Activity {
@@ -20,11 +34,15 @@ public class mapActivity extends Activity {
 
         // Create the text view
         TextView textView = new TextView(this);
-        textView.setTextSize(40);
+        textView.setTextSize(10);
         textView.setText(message);
-
-        // Set the text view as the activity layout
-        setContentView(textView);
+        connector test = new connector();
+        try {
+            test.test2();
+        } catch (Exception e) {
+            textView.setText(e.toString());
+            setContentView(textView);// Set the text view as the activity layout
+        }
     }
 
     @Override
@@ -47,5 +65,70 @@ public class mapActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void showM(String m) {
+        TextView textView = new TextView(this);
+        textView.setTextSize(10);
+        textView.setText(m);
+        setContentView(textView);
+    }
+    class connector {
+//        public String test() throws Exception {
+//            URL yahoo = new URL("http://developer.trimet.org/ws/v2/vehicles");
+//            HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
+//            BufferedReader in = new BufferedReader(
+//                    new InputStreamReader(
+//                            yc.getInputStream()));
+//            String inputLine;
+//            String res = new String();
+//            while ((inputLine = in.readLine()) != null)
+//                res += " " + inputLine;
+//            in.close();
+//            return res;
+//        }
+        public String test2() throws Exception {
+            String res = "";
+            req requester = new req();
+            requester.execute("http://developer.trimet.org/ws/v2/vehicles?appID=EEC7240AC3168C424AC5A98E1");
+            return res;
+        }
+    }
+
+    class req extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        protected String doInBackground(String... urls) {
+            try {
+                URL url= new URL(urls[0]);
+                URL yahoo = url;
+                String res = new String();
+
+                String appId = "EEC7240AC3168C424AC5A98E1";
+
+                HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
+//                yc.setRequestProperty("appID", appId);
+
+//                return Integer.toString(yc.getResponseCode());
+//                return yc.toString();
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(yc.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                return response.toString();
+            } catch (Exception e) {
+                this.exception = e;
+                return e.toString();
+            }
+        }
+
+        protected void onPostExecute(String feed) {
+            showM(feed);
+        }
     }
 }
