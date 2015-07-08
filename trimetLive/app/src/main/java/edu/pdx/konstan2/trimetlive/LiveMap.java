@@ -17,6 +17,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import android.graphics.Bitmap;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -26,6 +29,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.net.ssl.SSLEngineResult;
 
@@ -42,11 +47,24 @@ public class LiveMap extends FragmentActivity {
         // Create the text view
         setContentView(R.layout.activity_live_map);
         setUpMapIfNeeded();
-        connector test = new connector();
-        try {
-            test.test2();
-        } catch (Exception e) {
-        }
+        Log.d("On create", "Creating trimet connector.");
+        final connector test = new connector();
+        mMap.clear();
+        new Timer().schedule(new TimerTask()
+        {
+
+            @Override
+            public void run()
+            {
+                try {
+                    mMap.clear();
+                    test.test2();
+                } catch (Exception e) {
+                    Log.d("Exception", e.toString());
+                }
+                // Start the home screen
+            }
+        }, 5000);
 
     }
 
@@ -169,6 +187,7 @@ class connector {
                 return response.toString();
             } catch (Exception e) {
                 this.exception = e;
+                Log.d("Cought exception in asy", e.toString());
                 return e.toString();
             }
         }
@@ -179,11 +198,35 @@ class connector {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 vehicle v =  (vehicle) pair.getValue();
-                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.tripID)
-                .snippet("Type "+ v.type+"\n"+
-                         "Route number" + v.routeNumber+"\n"+
-                         "Sign" +v.signMessage));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.tripID));
+//                .snippet("Type "+ v.type+"\n"+
+//                         "Route number" + v.routeNumber+"\n"+
+//                         "Sign" +v.signMessage));
             }
         }
     }
+    private View infoWindow;
+    public void displayView(Marker arg0) {
+        arg0.setSnippet("test");
+
+    }
+
+    class CustomInfoAdapter implements GoogleMap.InfoWindowAdapter {
+
+
+        @Override
+        public View getInfoContents(Marker arg0) {
+            displayView(arg0);
+            return infoWindow;
+        }
+
+        @Override
+        public View getInfoWindow(Marker arg0) {
+            return null;
+        }
+
+
+    }
+
+
 }
