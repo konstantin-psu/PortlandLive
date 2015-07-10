@@ -9,14 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 
 public class MainActivity extends Activity {
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+    public Intent intent = null;
 
     /** Called when the user clicks the Send button */
     public void sendMessage(View view) {
@@ -26,11 +22,12 @@ public class MainActivity extends Activity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
+
     public void callMap(View view) {
-        Intent intent = new Intent(this, LiveMap.class);
+        intent = new Intent(this, LiveMap.class);
+        parameters params = new parameters();
         EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE,message);
+        intent.putExtra(EXTRA_MESSAGE,params.showStops());
         startActivity(intent);
     }
     @Override
@@ -65,6 +62,8 @@ public class MainActivity extends Activity {
 
 
 class parameters {
+    //TODO Update when possile
+    // v1 Task: Create request string.
 
     //********************* Vehicle Location **********************
 
@@ -134,6 +133,9 @@ class parameters {
     callback	// string (optional)	If present returns the json result in a jsonp callback function. Only used if json is set to true.*/
 
 
+    public String showStops() {
+
+    }
     // ******************* Stop Location **********************
 
     // Base HTTP URL: http://developer.trimet.org/ws/V1/stops

@@ -1,9 +1,13 @@
 package edu.pdx.konstan2.trimetlive;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.provider.SyncStateContract;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -11,9 +15,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import android.graphics.Bitmap;
@@ -28,7 +34,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,10 +47,17 @@ public class LiveMap extends FragmentActivity {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Long, vehicle> vehicleMap = new HashMap<Long, vehicle>();
     private jsonParser responseParser = new jsonParser();
+    private LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+    Queue<AsyncTask> jobQueue = new LinkedList<AsyncTask>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        Intent intent = getIntent();
+        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
         // Create the text view
         setContentView(R.layout.activity_live_map);
@@ -50,21 +65,26 @@ public class LiveMap extends FragmentActivity {
         Log.d("On create", "Creating trimet connector.");
         final connector test = new connector();
         mMap.clear();
-        new Timer().schedule(new TimerTask()
-        {
-
-            @Override
-            public void run()
-            {
-                try {
-                    mMap.clear();
-                    test.test2();
-                } catch (Exception e) {
-                    Log.d("Exception", e.toString());
-                }
-                // Start the home screen
-            }
-        }, 5000);
+        try {
+            test.test2(message);
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        }
+//        new Timer().schedule(new TimerTask()
+//        {
+//
+//            @Override
+//            public void run()
+//            {
+//                try {
+//                    mMap.clear();
+//                    test.test2();
+//                } catch (Exception e) {
+//                    Log.d("Exception", e.toString());
+//                }
+//                // Start the home screen
+//            }
+//        }, 5000);
 
     }
 
@@ -110,21 +130,61 @@ public class LiveMap extends FragmentActivity {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
         CircleOptions circleOptions = new CircleOptions().center(new LatLng(37.4, -122.1)).radius(1000); // In meters
-//        mMap.setOnMyLocationChangeListener(myLocationChangeListener);
+        // mMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
-// latitude and longitude
+        // latitude and longitude
         double latitude = 17.385044;
         double longitude = 78.486671;
 
-// create marker
+        // create marker
         MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps");
 
-// Changing marker icon
+        // Changing marker icon
         marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.t2));
 
-// adding marker
+        // adding marker
         mMap.addMarker(marker);
+        centerMapOnMyLocation();
 
+    }
+
+
+    private void centerMapOnMyLocation() {
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null)
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(location.getLatitude(), location.getLongitude()), 13)); CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(12)                   // Sets the zoom
+                    .bearing(0)                // Sets the orientation of the camera to east
+                    .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+        }
+
+    }
+
+    private LatLng getMyLocation() {
+        Criteria criteria = new Criteria();
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null)
+        {
+            return new LatLng(location.getLatitude(), location.getLongitude());
+
+        }
+        return null;
+    }
+
+    private LatLngBounds getCurrentBounds() {
+        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+        return bounds;
     }
 //    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
 //        @Override
@@ -150,10 +210,10 @@ class connector {
 //            in.close();
 //            return res;
 //        }
-    public String test2() throws Exception {
+    public String test2(String url) throws Exception {
         String res = "";
         req requester = new req();
-        requester.execute("http://developer.trimet.org/ws/v2/vehicles?appID=EEC7240AC3168C424AC5A98E1");
+        requester.execute(url);
         return res;
     }
 }
@@ -166,15 +226,9 @@ class connector {
             try {
                 URL url= new URL(urls[0]);
                 URL yahoo = url;
-                String res = new String();
 
-                String appId = "EEC7240AC3168C424AC5A98E1";
 
                 HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
-//                yc.setRequestProperty("appID", appId);
-
-//                return Integer.toString(yc.getResponseCode());
-//                return yc.toString();
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(yc.getInputStream()));
                 String inputLine;
@@ -187,8 +241,8 @@ class connector {
                 return response.toString();
             } catch (Exception e) {
                 this.exception = e;
-                Log.d("Cought exception in asy", e.toString());
-                return e.toString();
+                Log.d("exception in asyntask", e.toString());
+                return null;
             }
         }
 
@@ -225,6 +279,10 @@ class connector {
             return null;
         }
 
+
+    }
+
+    private void displayStops(LatLngBounds inBounds) {
 
     }
 
