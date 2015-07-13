@@ -26,7 +26,6 @@ public class MainActivity extends Activity {
     public void callMap(View view) {
         intent = new Intent(this, LiveMap.class);
         parameters params = new parameters();
-        EditText editText = (EditText) findViewById(R.id.edit_message);
         intent.putExtra(EXTRA_MESSAGE,params.showStops());
         startActivity(intent);
     }
@@ -134,7 +133,7 @@ class parameters {
 
 
     public String showStops() {
-
+        return "showStops";
     }
     // ******************* Stop Location **********************
 

@@ -45,17 +45,17 @@ import javax.net.ssl.SSLEngineResult;
 public class LiveMap extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private HashMap<Long, vehicle> vehicleMap = new HashMap<Long, vehicle>();
-    private jsonParser responseParser = new jsonParser();
-    private LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    private HashMap<Long, vehicle> vehicleMap;
+    private jsonParser responseParser;
+    private LocationManager locationManager;
 
-    Queue<AsyncTask> jobQueue = new LinkedList<AsyncTask>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        responseParser = new jsonParser();
+        vehicleMap = new HashMap<Long, vehicle>();
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
@@ -70,6 +70,19 @@ public class LiveMap extends FragmentActivity {
         } catch (Exception e) {
             Log.d("Exception", e.toString());
         }
+
+
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition position) {
+                LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+                new showStops().execute(displayStops(bounds));
+//                displayStops(bounds);
+            }
+        });
+
+//        timed stops = new timed();
+//        stops.execute("test");
 //        new Timer().schedule(new TimerTask()
 //        {
 //
@@ -159,7 +172,7 @@ public class LiveMap extends FragmentActivity {
         {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(location.getLatitude(), location.getLongitude()), 13)); CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(12)                   // Sets the zoom
+                    .zoom(18)                   // Sets the zoom
                     .bearing(0)                // Sets the orientation of the camera to east
                     .tilt(0)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
@@ -218,32 +231,35 @@ class connector {
     }
 }
 
+    public String request(String urlString) {
+        try {
+            URL url= new URL(urlString);
+            URL yahoo = url;
+
+
+            HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(yc.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            return response.toString();
+        } catch (Exception e) {
+            Log.d("exception in asyntask", e.toString());
+            return null;
+        }
+
+    }
     class req extends AsyncTask<String, Void, String> {
 
         private Exception exception;
 
         protected String doInBackground(String... urls) {
-            try {
-                URL url= new URL(urls[0]);
-                URL yahoo = url;
-
-
-                HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(yc.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-                return response.toString();
-            } catch (Exception e) {
-                this.exception = e;
-                Log.d("exception in asyntask", e.toString());
-                return null;
-            }
+            return request(urls[0]);
         }
 
         protected void onPostExecute(String feed) {
@@ -282,8 +298,83 @@ class connector {
 
     }
 
-    private void displayStops(LatLngBounds inBounds) {
+    class timed extends AsyncTask<String, Void, String> {
+        private Exception exception;
 
+        protected String doInBackground(String... urls) {
+            Log.d("-+-+", "starting timer");
+            try {
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            Log.d("-+-+", "Timer in motion.");
+                        } catch (Exception e) {
+                            Log.d("Exception", e.toString());
+                        }
+                        // Start the home screen
+                    }
+                }, 1000);
+            } catch (Exception e) {
+                this.exception = e;
+                Log.d("exception in asyntask", e.toString());
+                return null;
+            }
+            return "test";
+        }
+
+        protected void onPostExecute(String feed) {
+//            responseParser.parse(feed, vehicleMap);
+//            Iterator it = vehicleMap.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Map.Entry pair = (Map.Entry)it.next();
+//                vehicle v =  (vehicle) pair.getValue();
+//                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.tripID));
+////                .snippet("Type "+ v.type+"\n"+
+////                         "Route number" + v.routeNumber+"\n"+
+////                         "Sign" +v.signMessage));
+//            }
+        }
+
+    }
+    public String displayStops(LatLngBounds inBounds) {
+        LatLngBounds b = inBounds;
+        LatLng northeast = b.northeast;
+        LatLng southwest = b.southwest;
+        String ne = northeast.toString();
+        String sw = southwest.toString();
+        Double latUp = northeast.latitude;
+        Double lonUp = northeast.longitude;
+        Double latDown = southwest.latitude;
+        Double lonDown = southwest.longitude;
+        String box = lonDown.toString()+","+latDown.toString()+","+lonUp.toString()+","+latUp.toString();
+//        String request =
+        Log.d("bounds", box);
+        String request = "http://developer.trimet.org/ws/V1/stops?appID=EEC7240AC3168C424AC5A98E1&json=true&bbox="+box;
+        return request;
+
+    }
+
+    class showStops extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        protected String doInBackground(String... urls) {
+            return request(urls[0]);
+        }
+
+        protected void onPostExecute(String feed) {
+//            responseParser.parse(feed, vehicleMap);
+//            Iterator it = vehicleMap.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Map.Entry pair = (Map.Entry)it.next();
+//                vehicle v =  (vehicle) pair.getValue();
+//                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.tripID));
+////                .snippet("Type "+ v.type+"\n"+
+////                         "Route number" + v.routeNumber+"\n"+
+////                         "Sign" +v.signMessage));
+//            }
+        }
     }
 
 
