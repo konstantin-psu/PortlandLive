@@ -31,4 +31,18 @@ public class jsonParser {
         } catch (Exception e) {
         }
     }
+    public void parseStops(String response, HashMap<Long, Stop> sMap) {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject jobj = (JSONObject) parser.parse(response.toString());
+            JSONObject v = (JSONObject) jobj.get("resultSet");
+            JSONArray arr = (JSONArray) v.get("location");
+            Iterator<JSONObject> iter = arr.iterator();
+            while(iter.hasNext()) {
+                Stop t = new Stop(iter.next());
+                sMap.put(t.locID, t);
+            }
+        } catch (Exception e) {
+        }
+    }
 }

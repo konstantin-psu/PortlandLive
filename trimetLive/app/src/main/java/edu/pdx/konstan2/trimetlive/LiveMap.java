@@ -46,6 +46,7 @@ public class LiveMap extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Long, vehicle> vehicleMap;
+    private HashMap<Long, Stop> stopMap;
     private jsonParser responseParser;
     private LocationManager locationManager;
 
@@ -56,6 +57,7 @@ public class LiveMap extends FragmentActivity {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         responseParser = new jsonParser();
         vehicleMap = new HashMap<Long, vehicle>();
+        stopMap = new HashMap<Long, Stop>();
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
@@ -364,16 +366,17 @@ class connector {
         }
 
         protected void onPostExecute(String feed) {
-//            responseParser.parse(feed, vehicleMap);
-//            Iterator it = vehicleMap.entrySet().iterator();
-//            while (it.hasNext()) {
-//                Map.Entry pair = (Map.Entry)it.next();
-//                vehicle v =  (vehicle) pair.getValue();
-//                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.tripID));
-////                .snippet("Type "+ v.type+"\n"+
-////                         "Route number" + v.routeNumber+"\n"+
-////                         "Sign" +v.signMessage));
-//            }
+            mMap.clear();
+            responseParser.parseStops(feed, stopMap);
+            Iterator it = stopMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                Stop v =  (Stop) pair.getValue();
+                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.locID.toString()));
+//                .snippet("Type "+ v.type+"\n"+
+//                         "Route number" + v.routeNumber+"\n"+
+//                         "Sign" +v.signMessage));
+            }
         }
     }
 
