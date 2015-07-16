@@ -82,26 +82,6 @@ class parameters {
     showStale      //  boolean (optional) "true" or "false" (default is false)     If true results will include entries that have expired. The query time is greater than vehicle[@expires].*/
 
 
-    //********************* Arrivals  ***********************
-
-    // Base HTTP URL: http://developer.trimet.org/ws/v2/arrivals
-    // Base HTTPS URL: https://developer.trimet.org/ws/v2/arrivals
-
-/*    locIDs	       // comma delimited list of location IDs (required)	The location IDs to report arrivals. Arrivals are reported for each unique route and direction that services each stop identified by their location ID. Up to 10 location IDs can be reported at once.
-    appID	        //string (required)	Your appID received during registration.
-    json	       // boolean (optional) "true" (default) or "false"	If false results will be returned in XML format rather than the default json format.
-    callback	   // string (optional)	If present returns the json result in a jsonp callback function. Only used if json is set to true.
-    showPosition   // boolean (optional) "true" or "false" (default)	If true arrival elements will include blockPosition elements when available.
-    minutes	       *//** integer (optional) default is 20	Arrivals for each route and direction served at the stops in locIDs will be returned up to the first that is further than minutes away. Maximum is 60.
-                    *For example: If minutes is set to 20 (the default) results may include arrivals 10 minutes and 23 minutes away. If minutes where instead set to 40 results would include the first two arrivals at 10 and 23 minutes and an additional arrival 45 minutes away.
-                   **//*
-    arrivals	   *//** integer (optional) default is 2	At least this many arrivals for each route and direction served at the stops in locIDs will be returned. An arrival after an hour terminates this criteria.
-                   * For example: If arrivals is set to 2 (the default) results may include arrivals 10 minutes and 23 minutes away. If arrivals where instead set to 4 results would include the first two arrivals at 10 and 23 minutes and an additional arrival 45 and a scheduled arrival 65 minutes away.
-                   **//*
-    begin	       // date time (optional)	Seconds since epoch, or string in 'yyyy-MM-ddTHH:mm:ss' format. If present arrivals after this time will be included. If set to a value prior to the current time, the current time will be used instead. All arrivals will be returned between begin and end parameters. Any arrival that can be estimated (up to an hour away from the current time) will be included. Otherwise all arrivals will be scheduled. Currently does not apply to streetcar arrivals.
-    end	           // date time (optional)	Seconds since epoch, or string in 'yyyy-MM-ddTHH:mm:ss' format. If present arrivals before this time will be included. Requires begin parameter. If end is omitted while begin is present end will default to one hour after begin. Maximum time between begin and end is one day.*/
-
-
     //********************* Detours ****************************
 
     // Base HTTP URL: http://developer.trimet.org/ws/V1/detours
@@ -170,4 +150,24 @@ class parameters {
     appID	         //string (required)	Your appID received during registration.*/
 
 }
+
+//********************* Arrivals  ***********************
+
+// Base HTTP URL: http://developer.trimet.org/ws/v2/arrivals
+// Base HTTPS URL: https://developer.trimet.org/ws/v2/arrivals
+
+/*    locIDs	       // comma delimited list of location IDs (required)	The location IDs to report arrivals. Arrivals are reported for each unique route and direction that services each stop identified by their location ID. Up to 10 location IDs can be reported at once.
+    appID	        //string (required)	Your appID received during registration.
+    json	       // boolean (optional) "true" (default) or "false"	If false results will be returned in XML format rather than the default json format.
+    callback	   // string (optional)	If present returns the json result in a jsonp callback function. Only used if json is set to true.
+    showPosition   // boolean (optional) "true" or "false" (default)	If true arrival elements will include blockPosition elements when available.
+    minutes	       *//** integer (optional) default is 20	Arrivals for each route and direction served at the stops in locIDs will be returned up to the first that is further than minutes away. Maximum is 60.
+ *For example: If minutes is set to 20 (the default) results may include arrivals 10 minutes and 23 minutes away. If minutes where instead set to 40 results would include the first two arrivals at 10 and 23 minutes and an additional arrival 45 minutes away.
+ **//*
+    arrivals	   *//** integer (optional) default is 2	At least this many arrivals for each route and direction served at the stops in locIDs will be returned. An arrival after an hour terminates this criteria.
+ * For example: If arrivals is set to 2 (the default) results may include arrivals 10 minutes and 23 minutes away. If arrivals where instead set to 4 results would include the first two arrivals at 10 and 23 minutes and an additional arrival 45 and a scheduled arrival 65 minutes away.
+ **//*
+    begin	       // date time (optional)	Seconds since epoch, or string in 'yyyy-MM-ddTHH:mm:ss' format. If present arrivals after this time will be included. If set to a value prior to the current time, the current time will be used instead. All arrivals will be returned between begin and end parameters. Any arrival that can be estimated (up to an hour away from the current time) will be included. Otherwise all arrivals will be scheduled. Currently does not apply to streetcar arrivals.
+    end	           // date time (optional)	Seconds since epoch, or string in 'yyyy-MM-ddTHH:mm:ss' format. If present arrivals before this time will be included. Requires begin parameter. If end is omitted while begin is present end will default to one hour after begin. Maximum time between begin and end is one day.*/
+
 

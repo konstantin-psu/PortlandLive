@@ -47,6 +47,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.pdx.konstan2.trimetlive.MainActivity" />
         </activity>
+        <activity
+            android:name=".ArrivalsActivity"
+            android:label="@string/title_activity_arrivals"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.pdx.konstan2.trimetlive.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
