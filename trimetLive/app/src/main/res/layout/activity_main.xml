@@ -9,7 +9,7 @@
         <!--android:layout_width="0dp"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:hint="@string/edit_message" />-->
-    <Button
+    <Button android:id="@+id/sendMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_send"
@@ -17,14 +17,14 @@
         android:onClick="sendMessage" />
 
 
-    <Button
+    <Button android:id="@+id/callMap"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_mapTest"
         android:background="?android:attr/selectableItemBackground"
         android:onClick="callMap" />
 
-    <Button
+    <Button android:id="@+id/callArrivals"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_arrivals"
