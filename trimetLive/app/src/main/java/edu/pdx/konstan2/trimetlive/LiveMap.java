@@ -2,12 +2,10 @@ package edu.pdx.konstan2.trimetlive;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.provider.SyncStateContract;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -16,17 +14,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import android.graphics.Bitmap;
+
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -34,20 +29,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.net.ssl.SSLEngineResult;
 
 public class LiveMap extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Long, vehicle> vehicleMap;
     private HashMap<Long, Stop> stopMap;
-    private jsonParser responseParser;
+    private responseParserFactory responseParser;
     private LocationManager locationManager;
 
 
@@ -55,7 +46,7 @@ public class LiveMap extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        responseParser = new jsonParser();
+        responseParser = new responseParserFactory();
         vehicleMap = new HashMap<Long, vehicle>();
         stopMap = new HashMap<Long, Stop>();
         Intent intent = getIntent();
