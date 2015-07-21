@@ -9,12 +9,12 @@
         <!--android:layout_width="0dp"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:hint="@string/edit_message" />-->
-    <Button android:id="@+id/sendMessage"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_send"
-        android:background="?android:attr/selectableItemBackground"
-        android:onClick="sendMessage" />
+    <!--<Button android:id="@+id/sendMessage"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/button_send"-->
+        <!--android:background="?android:attr/selectableItemBackground"-->
+        <!--android:onClick="sendMessage" />-->
 
 
     <Button android:id="@+id/callMap"
@@ -29,6 +29,6 @@
         android:layout_height="wrap_content"
         android:text="@string/button_arrivals"
         android:background="?android:attr/selectableItemBackground"
-        android:onClick="callArrivals" />
+        android:onClick="callArrivalsActivity" />
 
 </LinearLayout>

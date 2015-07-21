@@ -10,4 +10,5 @@
     <string name="title_activity_map">mapActivity</string>
     <string name="title_activity_live_map">Map</string>
     <string name="title_activity_arrivals">ArrivalsActivity</string>
+    <string name="stopIdHing">Enter Stop ID</string>
 </resources>

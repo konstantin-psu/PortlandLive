@@ -17,9 +17,9 @@ public class MainActivity extends Activity {
     /** Called when the user clicks the Send button */
     public void sendMessage(View view) {
         Intent intent = new Intent(this, mapActivity.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
+//        EditText editText = (EditText) findViewById(R.id.edit_message);
+//        String message = editText.getText().toString();
+//        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
 
@@ -28,6 +28,12 @@ public class MainActivity extends Activity {
         parameters params = new parameters();
         intent.putExtra(EXTRA_MESSAGE,params.showStops());
         startActivity(intent);
+    }
+
+    public void callArrivalsActivity(View view) {
+//        intent = new Intent(this, ArrivalsActivity.class);
+//        startActivity(intent);
+        startActivity(new Intent(this, ArrivalsActivity.class));
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

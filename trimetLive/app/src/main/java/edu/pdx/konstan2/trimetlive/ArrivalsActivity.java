@@ -1,13 +1,32 @@
 package edu.pdx.konstan2.trimetlive;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class ArrivalsActivity extends ActionBarActivity {
 
+    public void getArrivalsForId(View view) {
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        String message = editText.getText().toString();
+
+        // Create the text view
+        TextView textView = new TextView(this);
+        textView.setTextSize(10);
+        textView.setText(message);
+
+        TextView tw = (TextView) findViewById(R.id.displayArrivalsView);
+        tw.setTextSize(20);
+        tw.setText(message);
+
+//        setContentView(textView);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
