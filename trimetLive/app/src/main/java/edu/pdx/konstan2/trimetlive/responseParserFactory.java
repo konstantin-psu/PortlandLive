@@ -16,7 +16,7 @@ import java.util.Iterator;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
-public class jsonParser {
+public class responseParserFactory {
     public void parse(String response, HashMap<Long, vehicle> vMap) {
         try {
             JSONParser parser = new JSONParser();
