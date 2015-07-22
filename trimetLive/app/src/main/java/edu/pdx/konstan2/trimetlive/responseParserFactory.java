@@ -6,6 +6,8 @@ package edu.pdx.konstan2.trimetlive;
  * Takes trimet respond as input, and parses it to JSONObject.
  */
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -57,6 +59,7 @@ public class responseParserFactory {
                 sMap.put(t.id, t);
             }
         } catch (Exception e) {
+            Log.d("exception", e.toString());
         }
     }
 }

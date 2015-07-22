@@ -13,13 +13,13 @@ public class Arrivals {
     JSONObject detour;
     Long dir;
     Long estimated;
-    String feet;
+    Long feet;
     String fullsign;
     Boolean inCongestion;
     Long loadPercentage;
     Long locid;
     Long route;
-    Double scheduled;
+    Long scheduled;
     String shortSign;
     String status;
     String reason;
@@ -28,27 +28,30 @@ public class Arrivals {
     Boolean replacedService;
     String piece;
     String vehicleID;
+    public String asString() {
+        return shortSign +" " + scheduled.toString();
+    }
     public Arrivals (JSONObject v) {
-        id              = (String) v.get("locid");
+        id              = (String) v.get("id");
         blockID         = (Long) v.get("blockID");
         departed        = (Boolean) v.get("departed");
         detoured        = (Boolean) v.get("detoured");
-        detour          = (JSONObject) v.get("detour");
+//        detour          = (JSONObject) v.get("detour"); TODO Add detours later
         dir             = (Long) v.get("dir");
         estimated       = (Long) v.get("estimated");
-        feet            = (String) v.get("feet");
+        feet            = (Long) v.get("feet");
         fullsign        = (String) v.get("fullsign");
         inCongestion    = (Boolean) v.get("inCongestion");
         loadPercentage  = (Long) v.get("loadPercentage");
         locid           = (Long) v.get("locid");
         route           = (Long) v.get("route");
-        scheduled       = (Double) v.get("scheduled");
+        scheduled       = (Long) v.get("scheduled");
         shortSign       = (String) v.get("shortSign");
         status          = (String) v.get("status");
-        reason          = (String) v.get("reason");
+//        reason          = (String) v.get("reason");
         tripID          = (String) v.get("tripID");
         newTrip         = (Boolean) v.get("newTrip");
-        replacedService = (Boolean) v.get("replacedService");
+//        replacedService = (Boolean) v.get("replacedService");
         piece           = (String) v.get("piece");
         vehicleID       = (String) v.get("vehicleID");
     }

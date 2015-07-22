@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -31,9 +32,20 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
     }
     public void execute() {
         new responseParserFactory().parseArrivals(response, arrivalsmap);
-        tw.setText(response);
+        tw.setText(mapToString(arrivalsmap));
         hideSoftKeyboard(ArrivalsActivity.this);
 
+    }
+    public String mapToString(Map<String, Arrivals> arr) {
+        String result = new String();
+        Iterator it = arr.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            result+=((Arrivals) pair.getValue()).asString()+"\n";
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+
+        return result;
     }
     public void getArrivalsForId(View view) {
         EditText editText = (EditText) findViewById(R.id.edit_message);
