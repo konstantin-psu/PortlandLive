@@ -45,4 +45,18 @@ public class responseParserFactory {
         } catch (Exception e) {
         }
     }
+    public void parseArrivals(String response, HashMap<String, Arrivals> sMap) {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject jobj = (JSONObject) parser.parse(response.toString());
+            JSONObject v = (JSONObject) jobj.get("resultSet");
+            JSONArray arr = (JSONArray) v.get("arrival");
+            Iterator<JSONObject> iter = arr.iterator();
+            while(iter.hasNext()) {
+                Arrivals t = new Arrivals(iter.next());
+                sMap.put(t.id, t);
+            }
+        } catch (Exception e) {
+        }
+    }
 }

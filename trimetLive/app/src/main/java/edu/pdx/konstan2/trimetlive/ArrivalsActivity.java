@@ -12,12 +12,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
 
     String url;
     String response;
     TextView tw;
+    HashMap <String, Arrivals> arrivalsmap;
     public String url() {
         return  url;
     }
@@ -26,6 +30,7 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
         response = resp;
     }
     public void execute() {
+        new responseParserFactory().parseArrivals(response, arrivalsmap);
         tw.setText(response);
         hideSoftKeyboard(ArrivalsActivity.this);
 
@@ -59,6 +64,7 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
         setContentView(R.layout.activity_arrivals);
         tw = (TextView) findViewById(R.id.displayArrivalsView);
         tw.setMovementMethod(new ScrollingMovementMethod());
+        arrivalsmap = new HashMap<String, Arrivals>();
     }
 
     @Override
