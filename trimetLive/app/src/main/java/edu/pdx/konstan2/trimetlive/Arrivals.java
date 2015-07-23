@@ -2,6 +2,8 @@ package edu.pdx.konstan2.trimetlive;
 
 import org.json.simple.JSONObject;
 
+import java.util.Date;
+
 /**
  * Created by kmacarenco on 7/21/15.
  */
@@ -29,7 +31,8 @@ public class Arrivals {
     String piece;
     String vehicleID;
     public String asString() {
-        return shortSign +" " + scheduled.toString();
+        Date expiry = new Date(scheduled);
+        return shortSign +" " + expiry.toString();
     }
     public Arrivals (JSONObject v) {
         id              = (String) v.get("id");
