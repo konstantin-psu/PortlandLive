@@ -28,7 +28,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_arrivals"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/layout_border"
         android:onClick="callArrivalsActivity" />
+    <!--android:background="?android:attr/selectableItemBackground"-->
+
+    <Button android:id="@+id/testCall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_test"
+        android:background="?android:attr/selectableItemBackground"
+        android:onClick="callTest" />
+    <EditText
+        android:id="@+id/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

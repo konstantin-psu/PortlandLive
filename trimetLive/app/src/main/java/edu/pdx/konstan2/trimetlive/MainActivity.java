@@ -22,6 +22,10 @@ public class MainActivity extends Activity {
 //        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
+    public void callTest(View view) {
+        Intent intent = new Intent(this, testActivity.class);
+        startActivity(intent);
+    }
 
     public void callMap(View view) {
         intent = new Intent(this, LiveMap.class);

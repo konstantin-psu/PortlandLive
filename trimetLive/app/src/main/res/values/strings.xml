@@ -5,10 +5,16 @@
     <string name="action_settings">Settings</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
+    <string name="button_test">Test</string>
     <string name="button_mapTest">callMap</string>
     <string name="button_arrivals">Arrivals</string>
     <string name="title_activity_map">mapActivity</string>
     <string name="title_activity_live_map">Map</string>
     <string name="title_activity_arrivals">ArrivalsActivity</string>
     <string name="stopIdHing">Enter Stop ID</string>
+    <string name="title_activity_test">testActivity</string>
+
+    <!--COLORS-->
+    <color name="white">#FFFFFF</color>
+    <color name="red">#ffff0000</color>
 </resources>
