@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,6 +39,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Long, vehicle> vehicleMap;
     private HashMap<LatLng, Stop> stopMap;
+    private HashMap<LatLng, View> viewCache;
     private responseParserFactory responseParser;
     private LocationManager locationManager;
     final StopsFactory stops;
@@ -45,10 +47,12 @@ public class LiveMap extends FragmentActivity implements MasterTask {
 
     public LiveMap() {
         stops = new StopsFactory(this);
+        viewCache = new HashMap<LatLng, View>();
     }
 
     public void run() {
         mMap.clear();
+        stopMap = stops.stopsMap;
         Iterator it = stops.stopsMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
@@ -103,15 +107,30 @@ public class LiveMap extends FragmentActivity implements MasterTask {
 
                     @Override
                     public View getInfoContents(Marker arg0) {
+                        LatLng stopPosition = arg0.getPosition();
+                        if (viewCache.containsKey(stopPosition)) {
+                            return viewCache.get(stopPosition);
+                        }
                         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         LinearLayout displayPlace = (LinearLayout) findViewById(R.id.arrivalsDispay);
                         View custom = inflater.inflate(R.layout.insertable, null);
                         LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
-//                    TextView tv = (TextView) custom.findViewById(R.id.text);
+                        Stop stop = stopMap.get(stopPosition);
+                        Iterator<Route> it = stop.routesIterator();
+                        while(it.hasNext()) {
+                            Route r = (Route)it.next();
+                            TextView tv = new TextView(getApplicationContext());
+                            tv.setPadding(10,5,10,5);
+                            tv.setText(r.asString());
+                            insertPoint.addView(tv);
+                            it.remove(); // avoids a ConcurrentModificationException
+                        }
+
 
 //                    TextView tv = new TextView(this);
 //                    tv.setText(((Arrival) pair.getValue()).asString());
 //                    insertPoint.addView(tv); TODO working here
+                        viewCache.put(stopPosition, custom);
 
                         return custom;
                     }

@@ -69,17 +69,8 @@ public class responseParserFactory {
                 Node nNode = nList.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    NodeList dirList = eElement.getElementsByTagName("route");
-                    for (int count = 0; count < dirList.getLength(); count++) {
-                        Node node1 = dirList.item(count);
-                        if (node1.getNodeType() == node1.ELEMENT_NODE) {
-                            Element dir = (Element) node1;
-                            System.out.print("dir id : ");
-                            System.out.println(dir.getAttribute("dir"));
-                            System.out.print("dir desc: ");
-                            System.out.println(dir.getAttribute("desc"));
-                        }
-                    }
+                    Stop t = new Stop(eElement);
+                    sMap.put(new LatLng(t.latitude, t.longitude), t);
                 }
             }
         } catch (Exception e) {
