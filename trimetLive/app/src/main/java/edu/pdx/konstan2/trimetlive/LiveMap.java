@@ -24,7 +24,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -34,14 +33,29 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class LiveMap extends FragmentActivity {
+public class LiveMap extends FragmentActivity implements MasterTask {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Long, vehicle> vehicleMap;
     private HashMap<LatLng, Stop> stopMap;
     private responseParserFactory responseParser;
     private LocationManager locationManager;
+    final StopsFactory stops;
 
+
+    public LiveMap() {
+        stops = new StopsFactory(this);
+    }
+
+    public void run() {
+        mMap.clear();
+        Iterator it = stops.stopsMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Stop v =  (Stop) pair.getValue();
+            mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +77,8 @@ public class LiveMap extends FragmentActivity {
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-                new showStops().execute(displayStops(bounds));
+                stops.getStopsAtBounds(new Bbox(bounds));
+//                new showStops().execute(displayStops(bounds));
 //                displayStops(bounds);
             }
         });
@@ -74,43 +89,40 @@ public class LiveMap extends FragmentActivity {
             public boolean onMarkerClick(Marker marker) {
                 if (marker.isVisible() && !marker.isInfoWindowShown()) {
                     marker.showInfoWindow();
-                    Log.d("onInfoWindowClick", "hahahahahahahah info is shown");
                 }
-                Log.d("onInfoWindowClick", "hahahahahahahah");
                 return true;
             }
         });
 
         mMap.setInfoWindowAdapter(
-            new InfoWindowAdapter() {
-                @Override
-                public View getInfoWindow(Marker arg0) {
-                    return null;
-                }
+                new InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker arg0) {
+                        return null;
+                    }
 
-                @Override
-                public View getInfoContents(Marker arg0) {
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    LinearLayout displayPlace = (LinearLayout) findViewById(R.id.arrivalsDispay);
-                    View custom = inflater.inflate(R.layout.insertable, null);
-                    LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
+                    @Override
+                    public View getInfoContents(Marker arg0) {
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        LinearLayout displayPlace = (LinearLayout) findViewById(R.id.arrivalsDispay);
+                        View custom = inflater.inflate(R.layout.insertable, null);
+                        LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
 //                    TextView tv = (TextView) custom.findViewById(R.id.text);
 
-                    TextView tv = new TextView(this);
-                    tv.setText(((Arrival) pair.getValue()).asString());
-                    insertPoint.addView(tv);
+//                    TextView tv = new TextView(this);
+//                    tv.setText(((Arrival) pair.getValue()).asString());
+//                    insertPoint.addView(tv); TODO working here
 
-                    return custom;
+                        return custom;
+                    }
                 }
-            }
         );
 
-        mMap.clear();
-        try {
-            test.test2(message);
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        }
+//        try {
+//            test.test2(message);
+//        } catch (Exception e) {
+//            Log.d("Exception", e.toString());
+//        }
 
 
 
@@ -297,6 +309,18 @@ public class LiveMap extends FragmentActivity {
     }
 
 
+//    public Bbox boundsToBbox(LatLngBounds inBounds) {
+//        LatLngBounds b = inBounds;
+//        LatLng northeast = b.northeast;
+//        LatLng southwest = b.southwest;
+//        Double latUp = northeast.latitude;
+//        Double lonUp = northeast.longitude;
+//        Double latDown = southwest.latitude;
+//        Double lonDown = southwest.longitude;
+//        Bbox bbox = new Bbox(latDown, latUp, lonDown, lonUp);
+//        String box = lonDown.toString()+","+latDown.toString()+","+lonUp.toString()+","+latUp.toString();
+//        return bbox;
+//    }
 
     public String displayStops(LatLngBounds inBounds) {
         LatLngBounds b = inBounds;
@@ -310,7 +334,6 @@ public class LiveMap extends FragmentActivity {
         Log.d("bounds", box);
         String request = "http://developer.trimet.org/ws/V1/stops?appID=EEC7240AC3168C424AC5A98E1&json=true&bbox="+box;
         return request;
-
     }
 
     class showStops extends AsyncTask<String, Void, String> {

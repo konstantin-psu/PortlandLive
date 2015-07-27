@@ -1,6 +1,7 @@
 # Idea configuration
 .idea
 *.iml
+*.swp
 
 # Compiled binaries
 target

@@ -16,6 +16,12 @@ public class ArrivalsFactory implements AsyncJob {
     HashMap<String, Arrival> arrivalsmap;
     htmlRequestor req = new htmlRequestor();
     ArrivalsBuilder arrivalsRequest = new ArrivalsBuilder();
+    MasterTask master;
+
+    public void ArrivalsFactory(MasterTask master) {
+        this.master = master;
+    }
+
     public String url() {
         return  url;
     }
@@ -25,6 +31,7 @@ public class ArrivalsFactory implements AsyncJob {
     }
     public void execute() {
         new responseParserFactory().parseArrivals(response, arrivalsmap);
+        master.run();
 
     }
 

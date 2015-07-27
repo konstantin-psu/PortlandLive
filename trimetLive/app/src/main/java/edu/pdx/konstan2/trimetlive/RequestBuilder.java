@@ -167,29 +167,24 @@ class RoutesBuilder extends RequestBuilder {
 
 }
 class StopsBuilder extends RequestBuilder {
-    String version = "v2";
-    String command = "locIDs";
-    String name = "arrivals";
+    String version = "V1";
+    String command = "bbox";
+    String name = "stops";
     ArrayList<String> locids    = new ArrayList<String>();
     ArrayList<String> blocks = new ArrayList<String>();
 
     public StopsBuilder() {
         super();
         options.put("json", "false");
-        options.put("arrivals", "2");
-        options.put("minutes", "20");
-        options.put("showPosition", "false");
+        options.put("showRoutes", "true");
     }
-    public String request(String [] locations) {
-        String basic = base()+separator+command;
-        for (String s: locations) {
-            basic += separator+s;
-        }
+    public String request(String bounds) {
+        String basic = base()+separator+command+separator+bounds;
         return basic;
     }
 
     public String base() {
-        return simple()+version+separator+name+separator+options.get("appID");
+        return simple()+version+separator+name+separator+options.get("appID")+separator+"showRoutes"+separator+"true";
     }
     // ******************* Stop Location **********************
 

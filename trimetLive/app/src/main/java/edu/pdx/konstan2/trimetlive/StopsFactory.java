@@ -1,11 +1,48 @@
 package edu.pdx.konstan2.trimetlive;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.simple.*;
+
+import java.util.HashMap;
 
 /**
  * Created by kmacarenco on 7/13/15.
  */
-public class Stop {
+public class StopsFactory implements AsyncJob {
+    String url;
+    String response;
+    HashMap<LatLng, Stop> stopsMap = new HashMap<LatLng, Stop>();
+    StopsBuilder stopsRequest = new StopsBuilder();
+    MasterTask master;
+
+    public StopsFactory(MasterTask master) {
+        this.master = master;
+    }
+
+    public String url() {
+        return  url;
+    }
+
+    public void setResponse(String resp) {
+        response = resp;
+    }
+    public void execute() {
+        new responseParserFactory().parseStopsXML(response, stopsMap);
+        master.run();
+
+    }
+
+    public void getStopsAtBounds(Bbox bounds) {
+        url = stopsRequest.request(bounds.asString());
+        htmlRequestor req = new htmlRequestor();
+        req.execute(this);
+    }
+
+
+}
+
+class Stop {
     public Long locID             ;//  Identifies the vehicle.
     public String direction;
     public Double latitude;
