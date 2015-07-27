@@ -8,10 +8,8 @@ package edu.pdx.konstan2.trimetlive;
 
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -33,7 +31,7 @@ public class responseParserFactory {
         } catch (Exception e) {
         }
     }
-    public void parseStops(String response, HashMap<Long, Stop> sMap) {
+    public void parseStops(String response, HashMap<LatLng, Stop> sMap) {
         try {
             JSONParser parser = new JSONParser();
             JSONObject jobj = (JSONObject) parser.parse(response.toString());
@@ -42,12 +40,12 @@ public class responseParserFactory {
             Iterator<JSONObject> iter = arr.iterator();
             while(iter.hasNext()) {
                 Stop t = new Stop(iter.next());
-                sMap.put(t.locID, t);
+                sMap.put(new LatLng(t.latitude, t.longitude), t);
             }
         } catch (Exception e) {
         }
     }
-    public void parseArrivals(String response, HashMap<String, Arrivals> sMap) {
+    public void parseArrivals(String response, HashMap<String, Arrival> sMap) {
         try {
             JSONParser parser = new JSONParser();
             JSONObject jobj = (JSONObject) parser.parse(response.toString());
@@ -55,7 +53,7 @@ public class responseParserFactory {
             JSONArray arr = (JSONArray) v.get("arrival");
             Iterator<JSONObject> iter = arr.iterator();
             while(iter.hasNext()) {
-                Arrivals t = new Arrivals(iter.next());
+                Arrival t = new Arrival(iter.next());
                 sMap.put(t.id, t);
             }
         } catch (Exception e) {

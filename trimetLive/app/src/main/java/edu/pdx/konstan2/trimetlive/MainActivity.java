@@ -125,20 +125,6 @@ class parameters {
     public String showStops() {
         return "showStops";
     }
-    // ******************* Stop Location **********************
-
-    // Base HTTP URL: http://developer.trimet.org/ws/V1/stops
-    // Base HTTPS URL: https://developer.trimet.org/ws/V1/stops
-
-/*    bbox	        //comma delimited list of longitude and latitude values (optional)	bbox arguments are lonmin, latmin, lonmax, latmax in decimal degrees. These define the lower left and upper right corners of the bounding box.
-    ll	            //comma delimited long-lat pair (optional)	Defines center of search radius in decimal degrees.
-    feet	        //number (optional)	Use with ll to define search radius in feet.
-    meters	        //number (optional)	Use with ll to define search radius in meters.
-    showRoutes	    //boolean (optional)	location elements will include a list of routes that service the stop(s) if this is set to 'true'.
-    showRouteDirs	//boolean (optional)	route elements will include a list of 'dir' elements for each route direction that service the stop(s) if this is set to 'true'. Setting showRoutes is to 'true' is unnessisary if this is set to 'true'.
-    appID	        //string (required)	Your appID received during registration.
-    json	        //boolean (optional) "true" or "false" (default)	If true results will be returned in json format rather than the default xml format.
-    callback	    //string (optional)	If present returns the json result in a jsonp callback function. Only used if json is set to true.*/
 
     //******************* Trip Planner ************************
 
@@ -161,17 +147,17 @@ class parameters {
 
 }
 
-//********************* Arrivals  ***********************
+//********************* Arrival  ***********************
 
 // Base HTTP URL: http://developer.trimet.org/ws/v2/arrivals
 // Base HTTPS URL: https://developer.trimet.org/ws/v2/arrivals
 
-/*    locIDs	       // comma delimited list of location IDs (required)	The location IDs to report arrivals. Arrivals are reported for each unique route and direction that services each stop identified by their location ID. Up to 10 location IDs can be reported at once.
+/*    locIDs	       // comma delimited list of location IDs (required)	The location IDs to report arrivals. Arrival are reported for each unique route and direction that services each stop identified by their location ID. Up to 10 location IDs can be reported at once.
     appID	        //string (required)	Your appID received during registration.
     json	       // boolean (optional) "true" (default) or "false"	If false results will be returned in XML format rather than the default json format.
     callback	   // string (optional)	If present returns the json result in a jsonp callback function. Only used if json is set to true.
     showPosition   // boolean (optional) "true" or "false" (default)	If true arrival elements will include blockPosition elements when available.
-    minutes	       *//** integer (optional) default is 20	Arrivals for each route and direction served at the stops in locIDs will be returned up to the first that is further than minutes away. Maximum is 60.
+    minutes	       *//** integer (optional) default is 20	Arrival for each route and direction served at the stops in locIDs will be returned up to the first that is further than minutes away. Maximum is 60.
  *For example: If minutes is set to 20 (the default) results may include arrivals 10 minutes and 23 minutes away. If minutes where instead set to 40 results would include the first two arrivals at 10 and 23 minutes and an additional arrival 45 minutes away.
  **//*
     arrivals	   *//** integer (optional) default is 2	At least this many arrivals for each route and direction served at the stops in locIDs will be returned. An arrival after an hour terminates this criteria.

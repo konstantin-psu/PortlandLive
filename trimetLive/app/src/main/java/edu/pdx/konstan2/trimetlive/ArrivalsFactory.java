@@ -1,13 +1,43 @@
 package edu.pdx.konstan2.trimetlive;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.simple.JSONObject;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by kmacarenco on 7/21/15.
  */
-public class Arrivals {
+public class ArrivalsFactory implements AsyncJob {
+    String url;
+    String response;
+    HashMap<String, Arrival> arrivalsmap;
+    htmlRequestor req = new htmlRequestor();
+    ArrivalsBuilder arrivalsRequest = new ArrivalsBuilder();
+    public String url() {
+        return  url;
+    }
+
+    public void setResponse(String resp) {
+        response = resp;
+    }
+    public void execute() {
+        new responseParserFactory().parseArrivals(response, arrivalsmap);
+
+    }
+
+    public void getArrivalsAt(String [] stopLocations) {
+        url = arrivalsRequest.request(stopLocations);
+        req.execute(this);
+    }
+
+
+}
+
+
+class Arrival {
     String id;
     Long blockID;
     Boolean departed;
@@ -34,7 +64,7 @@ public class Arrivals {
         Date expiry = new Date(scheduled);
         return shortSign +" " + expiry.toString();
     }
-    public Arrivals (JSONObject v) {
+    public Arrival(JSONObject v) {
         id              = (String) v.get("id");
         blockID         = (Long) v.get("blockID");
         departed        = (Boolean) v.get("departed");
@@ -59,3 +89,4 @@ public class Arrivals {
         vehicleID       = (String) v.get("vehicleID");
     }
 }
+

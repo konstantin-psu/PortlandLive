@@ -1,15 +1,17 @@
 package edu.pdx.konstan2.trimetlive;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
     String url;
     String response;
     TextView tw;
-    HashMap <String, Arrivals> arrivalsmap;
+    HashMap <String, Arrival> arrivalsmap;
     public String url() {
         return  url;
     }
@@ -32,20 +34,27 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
     }
     public void execute() {
         new responseParserFactory().parseArrivals(response, arrivalsmap);
-        tw.setText(mapToString(arrivalsmap));
+//        tw.setText(mapToString(arrivalsmap));
+        mapToString(arrivalsmap);
         hideSoftKeyboard(ArrivalsActivity.this);
 
     }
-    public String mapToString(Map<String, Arrivals> arr) {
+    public void mapToString(Map<String, Arrival> arr) {
         String result = new String();
         Iterator it = arr.entrySet().iterator();
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout displayPlace = (LinearLayout) findViewById(R.id.arrivalsDispay);
+        View custom = inflater.inflate(R.layout.insertable, null);
+        LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            result+=((Arrivals) pair.getValue()).asString()+"\n";
+//            TextView tv = (TextView) custom.findViewById(R.id.text);
+            TextView tv = new TextView(this);
+            tv.setText(((Arrival) pair.getValue()).asString());
+            insertPoint.addView(tv);
             it.remove(); // avoids a ConcurrentModificationException
         }
-
-        return result;
+        displayPlace.addView(custom);
     }
     public void getArrivalsForId(View view) {
         EditText editText = (EditText) findViewById(R.id.edit_message);
@@ -76,7 +85,7 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
         setContentView(R.layout.activity_arrivals);
         tw = (TextView) findViewById(R.id.displayArrivalsView);
         tw.setMovementMethod(new ScrollingMovementMethod());
-        arrivalsmap = new HashMap<String, Arrivals>();
+        arrivalsmap = new HashMap<String, Arrival>();
     }
 
     @Override

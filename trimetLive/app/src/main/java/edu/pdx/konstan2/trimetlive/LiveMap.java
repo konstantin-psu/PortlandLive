@@ -1,6 +1,7 @@
 package edu.pdx.konstan2.trimetlive;
 
 import android.content.Context;
+
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
@@ -12,16 +13,18 @@ import android.os.Bundle;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,14 +33,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class LiveMap extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<Long, vehicle> vehicleMap;
-    private HashMap<Long, Stop> stopMap;
+    private HashMap<LatLng, Stop> stopMap;
     private responseParserFactory responseParser;
     private LocationManager locationManager;
 
@@ -48,7 +49,7 @@ public class LiveMap extends FragmentActivity {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         responseParser = new responseParserFactory();
         vehicleMap = new HashMap<Long, vehicle>();
-        stopMap = new HashMap<Long, Stop>();
+        stopMap = new HashMap<LatLng, Stop>();
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
@@ -57,13 +58,6 @@ public class LiveMap extends FragmentActivity {
         setUpMapIfNeeded();
         Log.d("On create", "Creating trimet connector.");
         final connector test = new connector();
-        mMap.clear();
-        try {
-            test.test2(message);
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        }
-
 
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
@@ -73,6 +67,52 @@ public class LiveMap extends FragmentActivity {
 //                displayStops(bounds);
             }
         });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.isVisible() && !marker.isInfoWindowShown()) {
+                    marker.showInfoWindow();
+                    Log.d("onInfoWindowClick", "hahahahahahahah info is shown");
+                }
+                Log.d("onInfoWindowClick", "hahahahahahahah");
+                return true;
+            }
+        });
+
+        mMap.setInfoWindowAdapter(
+            new InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker arg0) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker arg0) {
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LinearLayout displayPlace = (LinearLayout) findViewById(R.id.arrivalsDispay);
+                    View custom = inflater.inflate(R.layout.insertable, null);
+                    LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
+//                    TextView tv = (TextView) custom.findViewById(R.id.text);
+
+                    TextView tv = new TextView(this);
+                    tv.setText(((Arrival) pair.getValue()).asString());
+                    insertPoint.addView(tv);
+
+                    return custom;
+                }
+            }
+        );
+
+        mMap.clear();
+        try {
+            test.test2(message);
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        }
+
+
 
 //        timed stops = new timed();
 //        stops.execute("test");
@@ -135,21 +175,21 @@ public class LiveMap extends FragmentActivity {
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
-        CircleOptions circleOptions = new CircleOptions().center(new LatLng(37.4, -122.1)).radius(1000); // In meters
+//        CircleOptions circleOptions = new CircleOptions().center(new LatLng(37.4, -122.1)).radius(1000); // In meters
         // mMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
         // latitude and longitude
-        double latitude = 17.385044;
-        double longitude = 78.486671;
-
-        // create marker
-        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps");
-
-        // Changing marker icon
-        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.t2));
-
-        // adding marker
-        mMap.addMarker(marker);
+//        double latitude = 17.385044;
+//        double longitude = 78.486671;
+//
+//        // create marker
+//        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps");
+//
+//        // Changing marker icon
+//        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.t2));
+//
+//        // adding marker
+//        mMap.addMarker(marker);
         centerMapOnMyLocation();
 
     }
@@ -202,27 +242,14 @@ public class LiveMap extends FragmentActivity {
 //            }
 //        }
 //    };
-class connector {
-    //        public String test() throws Exception {
-//            URL yahoo = new URL("http://developer.trimet.org/ws/v2/vehicles");
-//            HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
-//            BufferedReader in = new BufferedReader(
-//                    new InputStreamReader(
-//                            yc.getInputStream()));
-//            String inputLine;
-//            String res = new String();
-//            while ((inputLine = in.readLine()) != null)
-//                res += " " + inputLine;
-//            in.close();
-//            return res;
-//        }
-    public String test2(String url) throws Exception {
-        String res = "";
-        req requester = new req();
-        requester.execute(url);
-        return res;
+    class connector {
+        public String test2(String url) throws Exception {
+            String res = "";
+            req requester = new req();
+            requester.execute(url);
+            return res;
+        }
     }
-}
 
     public String request(String urlString) {
         try {
@@ -258,90 +285,28 @@ class connector {
         protected void onPostExecute(String feed) {
             responseParser.parse(feed, vehicleMap);
             Iterator it = vehicleMap.entrySet().iterator();
+            mMap.clear();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
+                MarkerOptions markerOptions = new MarkerOptions();
                 vehicle v =  (vehicle) pair.getValue();
-                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.tripID));
-//                .snippet("Type "+ v.type+"\n"+
-//                         "Route number" + v.routeNumber+"\n"+
-//                         "Sign" +v.signMessage));
+                markerOptions.position(new LatLng(v.latitude, v.longitude));
+                mMap.addMarker(markerOptions);
             }
         }
     }
-    private View infoWindow;
-    public void displayView(Marker arg0) {
-        arg0.setSnippet("test");
-
-    }
-
-    class CustomInfoAdapter implements GoogleMap.InfoWindowAdapter {
 
 
-        @Override
-        public View getInfoContents(Marker arg0) {
-            displayView(arg0);
-            return infoWindow;
-        }
 
-        @Override
-        public View getInfoWindow(Marker arg0) {
-            return null;
-        }
-
-
-    }
-
-    class timed extends AsyncTask<String, Void, String> {
-        private Exception exception;
-
-        protected String doInBackground(String... urls) {
-            Log.d("-+-+", "starting timer");
-            try {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        try {
-                            Log.d("-+-+", "Timer in motion.");
-                        } catch (Exception e) {
-                            Log.d("Exception", e.toString());
-                        }
-                        // Start the home screen
-                    }
-                }, 1000);
-            } catch (Exception e) {
-                this.exception = e;
-                Log.d("exception in asyntask", e.toString());
-                return null;
-            }
-            return "test";
-        }
-
-        protected void onPostExecute(String feed) {
-//            responseParser.parse(feed, vehicleMap);
-//            Iterator it = vehicleMap.entrySet().iterator();
-//            while (it.hasNext()) {
-//                Map.Entry pair = (Map.Entry)it.next();
-//                vehicle v =  (vehicle) pair.getValue();
-//                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.tripID));
-////                .snippet("Type "+ v.type+"\n"+
-////                         "Route number" + v.routeNumber+"\n"+
-////                         "Sign" +v.signMessage));
-//            }
-        }
-
-    }
     public String displayStops(LatLngBounds inBounds) {
         LatLngBounds b = inBounds;
         LatLng northeast = b.northeast;
         LatLng southwest = b.southwest;
-        String ne = northeast.toString();
-        String sw = southwest.toString();
         Double latUp = northeast.latitude;
         Double lonUp = northeast.longitude;
         Double latDown = southwest.latitude;
         Double lonDown = southwest.longitude;
         String box = lonDown.toString()+","+latDown.toString()+","+lonUp.toString()+","+latUp.toString();
-//        String request =
         Log.d("bounds", box);
         String request = "http://developer.trimet.org/ws/V1/stops?appID=EEC7240AC3168C424AC5A98E1&json=true&bbox="+box;
         return request;
@@ -349,8 +314,6 @@ class connector {
     }
 
     class showStops extends AsyncTask<String, Void, String> {
-
-        private Exception exception;
 
         protected String doInBackground(String... urls) {
             return request(urls[0]);
@@ -363,13 +326,9 @@ class connector {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 Stop v =  (Stop) pair.getValue();
-                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)).title(v.locID.toString()));
-//                .snippet("Type "+ v.type+"\n"+
-//                         "Route number" + v.routeNumber+"\n"+
-//                         "Sign" +v.signMessage));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
             }
         }
     }
-
 
 }
