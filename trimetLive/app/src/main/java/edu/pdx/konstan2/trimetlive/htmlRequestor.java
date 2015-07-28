@@ -1,5 +1,6 @@
 package edu.pdx.konstan2.trimetlive;
 
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -7,20 +8,31 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by kmacarenco on 7/21/15.
  */
-public class htmlRequestor extends AsyncTask<AsyncJob , Void, AsyncJob> {
+public class htmlRequestor extends AsyncTask<AsyncJob , Void, ArrayList<AsyncJob>> {
     private Exception exception;
 
-    protected AsyncJob doInBackground(AsyncJob... urls) {
-        urls[0].setResponse(request(urls[0].url()));
-        return urls[0];
+    protected ArrayList<AsyncJob> doInBackground(AsyncJob... urls) {
+        ArrayList<AsyncJob> tasks = new ArrayList<AsyncJob>();
+        for (AsyncJob j: urls) {
+            j.setResponse(request(j.url()));
+            tasks.add(j);
+        }
+        return tasks;
     }
 
-    protected void onPostExecute(AsyncJob feed) {
-       feed.execute();
+    protected void onPostExecute(ArrayList<AsyncJob> feed) {
+        Iterator<AsyncJob> it = feed.iterator();
+        while(it.hasNext()) {
+            AsyncJob j = it.next();
+            j.execute();
+            it.remove();
+        }
     }
     public String request(String urlString) {
         try {

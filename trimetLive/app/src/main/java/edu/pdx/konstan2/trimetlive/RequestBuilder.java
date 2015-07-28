@@ -184,7 +184,7 @@ class StopsBuilder extends RequestBuilder {
     }
 
     public String base() {
-        return simple()+version+separator+name+separator+options.get("appID")+separator+"showRoutes"+separator+"true";
+        return simple()+version+separator+name+separator+options.get("appID")+separator+"showRoutes"+separator+"true"+separator+"showRouteDirs"+separator+"true";
     }
     // ******************* Stop Location **********************
 

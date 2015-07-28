@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -20,16 +19,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -74,16 +68,12 @@ public class LiveMap extends FragmentActivity implements MasterTask {
         // Create the text view
         setContentView(R.layout.activity_live_map);
         setUpMapIfNeeded();
-        Log.d("On create", "Creating trimet connector.");
-        final connector test = new connector();
 
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
                 stops.getStopsAtBounds(new Bbox(bounds));
-//                new showStops().execute(displayStops(bounds));
-//                displayStops(bounds);
             }
         });
 
@@ -125,44 +115,12 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                             insertPoint.addView(tv);
                             it.remove(); // avoids a ConcurrentModificationException
                         }
-
-
-//                    TextView tv = new TextView(this);
-//                    tv.setText(((Arrival) pair.getValue()).asString());
-//                    insertPoint.addView(tv); TODO working here
                         viewCache.put(stopPosition, custom);
 
                         return custom;
                     }
                 }
         );
-
-//        try {
-//            test.test2(message);
-//        } catch (Exception e) {
-//            Log.d("Exception", e.toString());
-//        }
-
-
-
-//        timed stops = new timed();
-//        stops.execute("test");
-//        new Timer().schedule(new TimerTask()
-//        {
-//
-//            @Override
-//            public void run()
-//            {
-//                try {
-//                    mMap.clear();
-//                    test.test2();
-//                } catch (Exception e) {
-//                    Log.d("Exception", e.toString());
-//                }
-//                // Start the home screen
-//            }
-//        }, 5000);
-
     }
 
     @Override
@@ -204,25 +162,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-        mMap.setMyLocationEnabled(true);
-//        CircleOptions circleOptions = new CircleOptions().center(new LatLng(37.4, -122.1)).radius(1000); // In meters
-        // mMap.setOnMyLocationChangeListener(myLocationChangeListener);
-
-        // latitude and longitude
-//        double latitude = 17.385044;
-//        double longitude = 78.486671;
-//
-//        // create marker
-//        MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps");
-//
-//        // Changing marker icon
-//        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.t2));
-//
-//        // adding marker
-//        mMap.addMarker(marker);
         centerMapOnMyLocation();
-
     }
 
 
@@ -247,22 +187,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
 
     }
 
-    private LatLng getMyLocation() {
-        Criteria criteria = new Criteria();
 
-        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        if (location != null)
-        {
-            return new LatLng(location.getLatitude(), location.getLongitude());
-
-        }
-        return null;
-    }
-
-    private LatLngBounds getCurrentBounds() {
-        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-        return bounds;
-    }
 //    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
 //        @Override
 //        public void onMyLocationChange(Location location) {
@@ -273,104 +198,4 @@ public class LiveMap extends FragmentActivity implements MasterTask {
 //            }
 //        }
 //    };
-    class connector {
-        public String test2(String url) throws Exception {
-            String res = "";
-            req requester = new req();
-            requester.execute(url);
-            return res;
-        }
-    }
-
-    public String request(String urlString) {
-        try {
-            URL url= new URL(urlString);
-            URL yahoo = url;
-
-
-            HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(yc.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            return response.toString();
-        } catch (Exception e) {
-            Log.d("exception in asyntask", e.toString());
-            return null;
-        }
-
-    }
-    class req extends AsyncTask<String, Void, String> {
-
-        private Exception exception;
-
-        protected String doInBackground(String... urls) {
-            return request(urls[0]);
-        }
-
-        protected void onPostExecute(String feed) {
-            responseParser.parse(feed, vehicleMap);
-            Iterator it = vehicleMap.entrySet().iterator();
-            mMap.clear();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-                MarkerOptions markerOptions = new MarkerOptions();
-                vehicle v =  (vehicle) pair.getValue();
-                markerOptions.position(new LatLng(v.latitude, v.longitude));
-                mMap.addMarker(markerOptions);
-            }
-        }
-    }
-
-
-//    public Bbox boundsToBbox(LatLngBounds inBounds) {
-//        LatLngBounds b = inBounds;
-//        LatLng northeast = b.northeast;
-//        LatLng southwest = b.southwest;
-//        Double latUp = northeast.latitude;
-//        Double lonUp = northeast.longitude;
-//        Double latDown = southwest.latitude;
-//        Double lonDown = southwest.longitude;
-//        Bbox bbox = new Bbox(latDown, latUp, lonDown, lonUp);
-//        String box = lonDown.toString()+","+latDown.toString()+","+lonUp.toString()+","+latUp.toString();
-//        return bbox;
-//    }
-
-    public String displayStops(LatLngBounds inBounds) {
-        LatLngBounds b = inBounds;
-        LatLng northeast = b.northeast;
-        LatLng southwest = b.southwest;
-        Double latUp = northeast.latitude;
-        Double lonUp = northeast.longitude;
-        Double latDown = southwest.latitude;
-        Double lonDown = southwest.longitude;
-        String box = lonDown.toString()+","+latDown.toString()+","+lonUp.toString()+","+latUp.toString();
-        Log.d("bounds", box);
-        String request = "http://developer.trimet.org/ws/V1/stops?appID=EEC7240AC3168C424AC5A98E1&json=true&bbox="+box;
-        return request;
-    }
-
-    class showStops extends AsyncTask<String, Void, String> {
-
-        protected String doInBackground(String... urls) {
-            return request(urls[0]);
-        }
-
-        protected void onPostExecute(String feed) {
-            mMap.clear();
-            responseParser.parseStops(feed, stopMap);
-            Iterator it = stopMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-                Stop v =  (Stop) pair.getValue();
-                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
-            }
-        }
-    }
-
 }

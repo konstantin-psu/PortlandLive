@@ -18,7 +18,7 @@ public class ArrivalsFactory implements AsyncJob {
     ArrivalsBuilder arrivalsRequest = new ArrivalsBuilder();
     MasterTask master;
 
-    public void ArrivalsFactory(MasterTask master) {
+    public ArrivalsFactory(MasterTask master) {
         this.master = master;
     }
 
