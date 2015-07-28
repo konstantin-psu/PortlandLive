@@ -162,6 +162,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
+        mMap.setMyLocationEnabled(true);
         centerMapOnMyLocation();
     }
 
@@ -172,6 +173,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
         Criteria criteria = new Criteria();
 
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+//        location = mMap.getMyLocation();
         if (location != null)
         {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(location.getLatitude(), location.getLongitude()), 13)); CameraPosition cameraPosition = new CameraPosition.Builder()

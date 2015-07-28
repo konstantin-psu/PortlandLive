@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context="edu.pdx.konstan2.trimetlive.testActivity">
 
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"/>
+
     <Button android:id="@+id/testCall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
