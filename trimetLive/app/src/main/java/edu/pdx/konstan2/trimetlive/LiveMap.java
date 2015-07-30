@@ -37,6 +37,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
     private responseParserFactory responseParser;
     private LocationManager locationManager;
     final StopsFactory stops;
+    LiveMap thisPointer = this;
 
 
     public LiveMap() {
@@ -88,6 +89,37 @@ public class LiveMap extends FragmentActivity implements MasterTask {
             }
         });
 
+        mMap.setOnInfoWindowClickListener(
+                new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        LatLng position = marker.getPosition();
+                        Stop currentStop = stopMap.get(position);
+
+                        Intent intent = new Intent(thisPointer, testActivity.class);
+                        ArrivalsBuilder arr = new ArrivalsBuilder();
+                        String routes = new String ();
+                        String routesID = new String ();
+                        intent.putExtra("stopId", currentStop.locID);
+                        Iterator<Route> it = currentStop.routesIterator();
+                        while(it.hasNext()) {
+                            Route n = it.next();
+                            it.remove();
+                            if (it.hasNext()) {
+                                routes += n.route + "+" + n.description + " ";
+                                routesID +=n.description+ " ";
+                            } else {
+                                routes += n.route + "+" + n.description;
+                                routesID +=n.description+ "";
+                            }
+                        }
+                        intent.putExtra("routes", routes);
+                        intent.putExtra("routesID", routesID);
+                        startActivity(intent);
+
+                    }
+                }
+        );
         mMap.setInfoWindowAdapter(
                 new InfoWindowAdapter() {
                     @Override

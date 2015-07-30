@@ -13,6 +13,8 @@
     <string name="title_activity_arrivals">ArrivalsActivity</string>
     <string name="stopIdHing">Enter Stop ID</string>
     <string name="title_activity_test">testActivity</string>
+    <string name="live_vehicle">Live vehicles location</string>
+    <string name="arrivals_selected_routes_textview">Arrivals for the selected routes</string>
 
     <!--COLORS-->
     <color name="white">#FFFFFF</color>

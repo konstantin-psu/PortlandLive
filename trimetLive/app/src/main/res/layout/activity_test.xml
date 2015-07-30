@@ -7,20 +7,103 @@
     android:orientation="vertical"
     tools:context="edu.pdx.konstan2.trimetlive.testActivity">
 
+    <TextView
+        android:id="@+id/testCall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/live_vehicle"
+        />
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="230dp"/>
+        android:layout_height="200dp"
+        tools:layout="@layout/fragment_map" />
 
-    <Button android:id="@+id/testCall"
+
+    <ScrollView android:id="@+id/ScrollView01"
+        android:layout_width="fill_parent"
+        android:layout_height="799px">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/arrivals_insert_point"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_test"
-        android:background="?android:attr/selectableItemBackground"
-        android:onClick="callTest" />
+        android:orientation="vertical" >
+        <!--android:background="@drawable/arrival_view_compostion"-->
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <!--<LinearLayout-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:orientation="horizontal" >-->
+        <!--<TextView-->
+        <!--android:id="@+id/text"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+        <!--</LinearLayout>-->
+        <!--<CheckBox-->
+            <!--android:id="@+id/cbxBox1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:checked="false"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/txtCheckBox"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="CheckBox: Not checked"-->
+            <!--/>-->
+        <!--<RadioGroup-->
+            <!--android:id="@+id/rgGroup1"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+            <!--<RadioButton android:id="@+id/RB1" android:text="Button1"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--/>-->
+            <!--<RadioButton android:id="@+id/RB2" android:text="Button2"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--/>-->
+            <!--<RadioButton android:id="@+id/RB3" android:text="Button3"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--/>-->
+        <!--</RadioGroup>-->
+        <!--<TextView-->
+            <!--android:id="@+id/txtRadio"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="RadioGroup: Nothing picked"-->
+            <!--/>-->
+        <!--<Spinner-->
+            <!--android:id="@+id/spnMusketeers"-->
+            <!--android:layout_width="250dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginTop="2dp"-->
+            <!--/>-->
+
+        <TextView
+            android:id="@+id/arrivalsTextView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/arrivals_selected_routes_textview"
+            />
+        <Button android:id="@+id/button_dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_test"
+            android:background="?android:attr/selectableItemBackground"
+            />
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

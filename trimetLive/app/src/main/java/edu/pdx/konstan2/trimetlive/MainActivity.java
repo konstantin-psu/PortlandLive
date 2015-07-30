@@ -24,6 +24,10 @@ public class MainActivity extends Activity {
     }
     public void callTest(View view) {
         Intent intent = new Intent(this, testActivity.class);
+        ArrivalsBuilder arr = new ArrivalsBuilder();
+        String [] a= "8381".split(" ");
+        intent.putExtra("stopId", "8381");
+        intent.putExtra("routes", "100 101");
         startActivity(intent);
     }
 

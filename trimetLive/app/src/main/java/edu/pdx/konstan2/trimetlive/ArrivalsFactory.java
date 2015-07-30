@@ -4,8 +4,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by kmacarenco on 7/21/15.
@@ -19,6 +21,7 @@ public class ArrivalsFactory implements AsyncJob {
     MasterTask master;
 
     public ArrivalsFactory(MasterTask master) {
+        arrivalsmap = new HashMap<>();
         this.master = master;
     }
 
@@ -67,6 +70,7 @@ class Arrival {
     Boolean replacedService;
     String piece;
     String vehicleID;
+    ArrayList<Route> routes = new ArrayList<>();
     public String asString() {
         Date expiry = new Date(scheduled);
         return shortSign +" " + expiry.toString();

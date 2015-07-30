@@ -88,6 +88,7 @@ public class responseParserFactory {
             while(iter.hasNext()) {
                 Arrival t = new Arrival(iter.next());
                 sMap.put(t.id, t);
+                iter.remove();
             }
         } catch (Exception e) {
             Log.d("exception", e.toString());
