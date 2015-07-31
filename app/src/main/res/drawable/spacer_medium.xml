@@ -2,9 +2,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <size
-        android:width="@dimen/spacing_medium"
-        android:height="@dimen/spacing_medium" />
+    <!--<size-->
+        <!--android:width="@dimen/spacing_medium"-->
+        <!--android:height="@dimen/spacing_medium" />-->
 
     <solid android:color="@android:color/transparent" />
 

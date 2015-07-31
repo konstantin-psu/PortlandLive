@@ -68,28 +68,9 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void mapToString(Map<String, Arrival> arr) {
-        String result = new String();
-        Iterator it = arr.entrySet().iterator();
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout displayPlace = (LinearLayout) findViewById(R.id.arrivals_insert_point);
-        View custom = inflater.inflate(R.layout.insertable, null);
-        LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
-        routes = new ArrayList<>();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-//            TextView tv = (TextView) custom.findViewById(R.id.text);
-            TextView tv = new TextView(this);
-            Arrival arrival = (Arrival) pair.getValue();
-            tv.setText(((Arrival) pair.getValue()).asString());
-            tv.setTextColor(Color.LTGRAY);
-            tv.setLineSpacing(5,1);
-            insertPoint.addView(tv);
-//            if (itemsSelected.contains(arrival.route)) {
-//                mMap.
-//            }
-            it.remove(); // avoids a ConcurrentModificationException
-        }
-        displayPlace.addView(custom);
+        ArrivalsViewBuilder arrivalsViewBuilder = new ArrivalsViewBuilder();
+        arrivalsViewBuilder.buildView(arrivalsFactory, this);
+
     }
     public void run(String methodName) {
         if (methodName.equals(ArrivalsFactory.command)) {
@@ -119,91 +100,31 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager() .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         Intent intent = getIntent();
         routesReslver = new HashMap<>();
-        String message = intent.getStringExtra("stopId");
-        String [] routes = intent.getStringExtra("routes").split("[#]");
-        String [] routeIDs = intent.getStringExtra("routesID").split("[+]");
-        String [] routeIdsOnly = intent.getStringExtra("routesIdsOnly").split("[#]");
-        for (String s: routes) {
-            String[] j = s.split("[+]");
-            routesReslver.put(j[1], j[0]);
+
+        Stop myStop = new Stop(intent.getStringExtra("stopJsonEncoded"));
+
+        for (Route r: myStop.routes) {
+            routesReslver.put(r.description, r.route.toString());
         }
-        locId = message;
+        locId = myStop.locID.toString();
         req = new htmlRequestor();
         arrivalsFactory = new ArrivalsFactory(this);
         vehiclesLocationFactory = new VehiclesLocationFactory(this);
 
         arrivalsFactory.getArrivalsAt(locId.split(" "));
-        vehiclesLocationFactory.getVehiclesOnRoutes(routeIdsOnly);
+        vehiclesLocationFactory.getVehiclesOnRoutes(myStop.routesIDs());
         req.execute(arrivalsFactory, vehiclesLocationFactory);
-        createMulticheckboxDialog(routeIDs);
-//        checkBox = (CheckBox) findViewById(R.id.cbxBox1);
-//        txtCheckBox = (TextView) findViewById(R.id.txtCheckBox);
-//        txtRadio = (TextView) findViewById(R.id.txtRadio);
-//        rb1 = (RadioButton) findViewById(R.id.RB1);
-//        rb2 = (RadioButton) findViewById(R.id.RB2);
-//        rb3 = (RadioButton) findViewById(R.id.RB3);
-//        spnMusketeers = (Spinner) findViewById(R.id.spnMusketeers);
-//        // React to events from the CheckBox
-//        checkBox.setOnClickListener(new CheckBox.OnClickListener() {
-//            public void onClick(View v){
-//                if (checkBox.isChecked()) {
-//                    txtCheckBox.setText("CheckBox: Box is checked");
-//                }
-//                else
-//                {
-//                    txtCheckBox.setText("CheckBox: Not checked");
-//                }
-//            }
-//        });
-//        // React to events from the RadioGroup
-//        rb1.setOnClickListener(new RadioGroup.OnClickListener() {
-//            public void onClick(View v){
-//                txtRadio.setText("Radio: Button 1 picked");
-//            }
-//        });
-//        rb2.setOnClickListener(new RadioGroup.OnClickListener() {
-//            public void onClick(View v){
-//                txtRadio.setText("Radio: Button 2 picked");
-//            }
-//        });
-//        rb3.setOnClickListener(new RadioGroup.OnClickListener() {
-//            public void onClick(View v){
-//                txtRadio.setText("Radio: Button 3 picked");
-//            }
-//        });
-//        // Set up the Spinner entries
-//        List<String> lsMusketeers = new ArrayList<String>();
-//        lsMusketeers.add("Athos");
-//        lsMusketeers.add("Porthos");
-//        lsMusketeers.add("Aramis");
-//        ArrayAdapter<String> aspnMusketeers =
-//                new ArrayAdapter<String>(this, android.R.layout.select_dialog_multichoice,
-//                        lsMusketeers);
-//        aspnMusketeers.setDropDownViewResource
-//                (android.R.layout.simple_spinner_dropdown_item);
-//        spnMusketeers.setAdapter(aspnMusketeers);
-//        // Set up a callback for the spinner
-//        spnMusketeers.setOnItemSelectedListener(
-//                new AdapterView.OnItemSelectedListener() {
-//                    public void onNothingSelected(AdapterView<?> arg0) {
-//                    }
-//
-//                    public void onItemSelected(AdapterView<?> parent, View v,
-//                                               int position, long id) {
-//                        // Code that does something when the Spinner value changes
-//                    }
-//                });
-//        runnable.run();
+        createMulticheckboxDialog(myStop);
     }
 
-    private void createMulticheckboxDialog (String [] items) {
+    private void createMulticheckboxDialog (Stop thisStop) {
         final Dialog dialog;
-        final ArrayList savedState = new ArrayList();
+
+        String [] items = thisStop.listRoutes();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("List arrivals for routes: ");
@@ -231,7 +152,7 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
 //                    }
 //                });
         dialog = builder.create();
-        dialog.show();
+//        dialog.show();
         Button btn = (Button) findViewById(R.id.button_dialog);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -241,41 +162,6 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
-//                final ArrayList<String> selColors = new ArrayList<String>();
-//                try {
-//                    AlertDialog.Builder dialog1 = new AlertDialog.Builder(getApplicationContext());
-//                    final String[] Colors = {"Red", "Green", "Blue", "Orange", "Pink"};
-//                    final boolean[] _selections = {true, true, true, true, true, true, true};
-//                    dialog1.setTitle("Colors List");
-//                    dialog1.setMessage("Select Your Favoriate Color");
-//                    dialog1.setMultiChoiceItems(Colors, _selections, new DialogInterface.OnMultiChoiceClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//                            if (isChecked) {
-//                                selColors.add(Colors[which]);
-//                                Toast.makeText(getApplicationContext(), "You have selected " + Colors[which], Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//                    dialog1.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                    dialog1.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            Toast.makeText(getApplicationContext(), "CANCELED", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                    dialog1.show();
-//                } catch (Exception ex) {
-//                    TextView tv = (TextView) findViewById(R.id.textView1);
-//                    tv.setText(ex.toString());
-//                    Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_LONG).show();
-//                }
-//            }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

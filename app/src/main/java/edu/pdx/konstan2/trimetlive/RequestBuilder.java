@@ -77,8 +77,10 @@ class VehiclesLocationBuilder extends RequestBuilder {
 
     public String request(String [] locations) {
         String basic = base()+separator+command;
+        String sep = separator;
         for (String s: locations) {
-            basic += separator+s;
+            basic += sep+s;
+            sep = ",";
         }
         return basic;
     }

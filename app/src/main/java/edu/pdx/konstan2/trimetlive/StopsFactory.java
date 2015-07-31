@@ -2,14 +2,29 @@ package edu.pdx.konstan2.trimetlive;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.jdom2.output.XMLOutputter;
 import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.XMLFormatter;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Created by kmacarenco on 7/13/15.
@@ -49,52 +64,90 @@ public class StopsFactory implements AsyncJob {
 }
 
 class Stop {
-    public Long locID             ;//  Identifies the vehicle.
+    public Long locID;//  Identifies the vehicle.
     public String direction;
     public Double latitude;
     public Double longitude;
     public String description;
     ArrayList<Route> routes = new ArrayList<Route>();
+    JSONObject jsonRepresntation;
+    Element xmlRepresentation;
 
-    public Stop (JSONObject v) {
+    public String toJsonString() {
+        StringBuilder str = new StringBuilder("{");
+        str.append("\"locid\":"+locID+",");
+        str.append("\"dir\":"+"\""+direction+"\""+",");
+        str.append("\"lng\":"+longitude+",");
+        str.append("\"lat\":"+latitude+",");
+        str.append("\"desc\":"+"\""+description+"\"");
+        String prefix = "";
+        if (routes.size() != 0) {
+            str.append(",\"routes\":"+"[");
+            for (Route r: routes) {
+                str.append(prefix);
+                str.append(r.toJsonString()+",");
+            }
+            str.append("]");
+        }
+        str.append("}");
+        return str.toString();
+    }
+
+
+    public Stop(String jsonString) {
+        try {
+            JSONParser parser = new JSONParser();
+            JSONObject jobj = (JSONObject) parser.parse(jsonString);
+            jsonRepresntation = jobj;
+            parse(jsonRepresntation);
+        } catch (Exception e) {
+        }
+
+    }
+    public String[] routesIDs () {
+        ArrayList<String> result = new ArrayList<>();
+        for (Route r: routes) {
+            result.add(r.route.toString());
+        }
+        return result.toArray(new String[result.size()]);
+    }
+    public String[] listRoutes() {
+        ArrayList<String> result = new ArrayList<>();
+        for (Route r: routes) {
+            result.add(r.description);
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    public void parse (JSONObject v) {
         locID             = (Long) v.get("locid");
         direction                  = (String) v.get("dir");
         longitude             = (Double) v.get("lng");
         latitude              = (Double) v.get("lat");
         description           = (String) v.get("desc");
-//        blockID               = (Long) v.get("blockID");
-//        bearing               = (Long) v.get("bearing");
-//        serviceDate           = (Long) v.get("serviceDate");
-//        locationInScheduleDay = (Long) v.get("locationInScheduleDay");
-//        time                  = (Long) v.get("time");
-//        expires               = (Long) v.get("expires");
-//        longitude             = (Double) v.get("longitude");
-//        latitude              = (Double) v.get("latitude");
-//        routeNumber           = (Long) v.get("routeNumber");
-//        direction             = (Long) v.get("direction");
-//        tripID                = (String) v.get("tripID");
-//        newTrip               = (Boolean) v.get("newTrip");
-//        delay                 = (Long) v.get("delay");
-//        messageCode           = (Long) v.get("messageCode");
-//        signMessage           = (String) v.get("signMessage");
-//        signMessageLong       = (String) v.get("signMessageLong");
-//        nextLocID             = (Long) v.get("nextLocID");
-//        nextStopSeq           = (Long) v.get("nextStopSeq");
-//        lastLocID             = (Long) v.get("lastLocID");
-//        lastStopSeq           = (Long) v.get("lastStopSeq");
-//        garage                = (String) v.get("garage");
-//        extrablockID          = (Long) v.get("extrablockID");
-//        offRoute              = (Boolean) v.get("offRoute");
-//        inCongestion          = (Boolean) v.get("inCongestion");
-//        loadPercentage        = (Long) v.get("loadPercentage");
+        JSONArray arr = (JSONArray) v.get("routes");
+        Iterator<JSONObject> iter = arr.iterator();
+        while(iter.hasNext()) {
+            Route r = new Route(iter.next());
+            routes.add(r);
+        }
+    }
+    public Stop (JSONObject v) {
+        jsonRepresntation = v;
+        parse(v);
     }
 
 
     public Iterator routesIterator() {
         return routes.iterator();
+
     }
 
+    public String toEncodedString() {
+        return toJsonString();
+    }
     public Stop (Element v) {
+        xmlRepresentation = v;
         locID = Long.parseLong(v.getAttribute("locid"));
         direction                  = v.getAttribute("dir");
         longitude = Double.parseDouble(v.getAttribute("lng"));
@@ -136,4 +189,6 @@ class Stop {
 //        inCongestion          = (Boolean) v.get("inCongestion");
 //        loadPercentage        = (Long) v.get("loadPercentage");
     }
+
+
 }

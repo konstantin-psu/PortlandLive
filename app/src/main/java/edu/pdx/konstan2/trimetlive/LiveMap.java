@@ -90,28 +90,8 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                         Stop currentStop = stopMap.get(position);
 
                         Intent intent = new Intent(thisPointer, testActivity.class);
-                        String routes = "";
-                        String routesIdsOnly = "";
-                        String routesID = "" ;
-                        intent.putExtra("stopId", currentStop.locID.toString());
-                        Iterator<Route> it = currentStop.routesIterator();
-                        while (it.hasNext()) {
-                            Route n = it.next();
-                            if (it.hasNext()) {
-                                routes += n.route + "+" + n.description + "#";
-                                routesIdsOnly += n.route + "#";
-                                routesID += n.description + "+";
-                            } else {
-                                routes += n.route + "+" + n.description;
-                                routesID += n.description + "";
-                                routesIdsOnly += n.route + "";
-                            }
-                        }
-                        intent.putExtra("routes", routes);
-                        intent.putExtra("routesID", routesID);
-                        intent.putExtra("routesIdsOnly", routesIdsOnly);
+                        intent.putExtra("stopJsonEncoded", currentStop.toEncodedString());
                         startActivity(intent);
-
                     }
                 }
         );

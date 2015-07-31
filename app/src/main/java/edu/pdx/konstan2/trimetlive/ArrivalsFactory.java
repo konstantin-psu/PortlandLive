@@ -2,6 +2,8 @@ package edu.pdx.konstan2.trimetlive;
 
 import org.json.simple.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,16 +68,21 @@ class Arrival {
     Boolean replacedService;
     String piece;
     String vehicleID;
+    DateFormat df = new SimpleDateFormat("HH:mm:ss");
     ArrayList<Route> routes = new ArrayList<>();
+    JSONObject jsonArrival;
     public String asString() {
         Date scheduled = new Date(this.scheduled);
-        Date estimated = new Date(this.estimated);
-        if (estimated != null)
-            return shortSign +" " + scheduled.toString()+" estimated at "+estimated.toString();
-        else
-            return shortSign +" " + scheduled.toString();
+        Date estimated;
+        if (this.estimated != null) {
+            estimated = new Date(this.estimated);
+            return shortSign + " " + scheduled.toString() + " estimated at " + estimated.toString();
+        } else {
+            return shortSign + " " + scheduled.toString();
+        }
     }
     public Arrival(JSONObject v) {
+        jsonArrival = v;
         id              = (String) v.get("id");
         blockID         = (Long) v.get("blockID");
         departed        = (Boolean) v.get("departed");
@@ -84,7 +91,7 @@ class Arrival {
         dir             = (Long) v.get("dir");
         estimated       = (Long) v.get("estimated");
         feet            = (Long) v.get("feet");
-        fullsign        = (String) v.get("fullsign");
+        fullsign        = (String) v.get("fullSign");
         inCongestion    = (Boolean) v.get("inCongestion");
         loadPercentage  = (Long) v.get("loadPercentage");
         locid           = (Long) v.get("locid");
