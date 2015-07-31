@@ -2,46 +2,38 @@ package edu.pdx.konstan2.trimetlive;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 
@@ -51,6 +43,7 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
     String locId;
     String route;
     ArrivalsFactory arrivalsFactory;
+    VehiclesLocationFactory vehiclesLocationFactory;
     ArrayList<String> routes;
 
     final ArrayList itemsSelected;
@@ -60,6 +53,7 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
     private RadioButton rb1, rb2, rb3;
     private Spinner spnMusketeers;
     private HashMap<String, String> routesReslver;
+    private htmlRequestor req;
 
     Runnable runnable = new Runnable() {
         public void run() {
@@ -94,8 +88,21 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
         }
         displayPlace.addView(custom);
     }
-    public void run() {
-        mapToString(arrivalsFactory.arrivalsmap);
+    public void run(String methodName) {
+        if (methodName.equals(ArrivalsFactory.command)) {
+            mapToString(arrivalsFactory.arrivalsmap);
+        } else if (methodName.equals(VehiclesLocationFactory.command)) {
+            addVehiclesLocations();
+        }
+    }
+
+    private void addVehiclesLocations() {
+        Iterator it = vehiclesLocationFactory.vehiclesMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Vehicle v = (Vehicle) pair.getValue();
+            mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
+        }
     }
 
     public void afficher()
@@ -115,15 +122,21 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
         routesReslver = new HashMap<>();
         String message = intent.getStringExtra("stopId");
-        String [] routes = intent.getStringExtra("routes").split(" ");
-        String [] routeIDs = intent.getStringExtra("routesID").split(" ");
+        String [] routes = intent.getStringExtra("routes").split("[#]");
+        String [] routeIDs = intent.getStringExtra("routesID").split("[+]");
+        String [] routeIdsOnly = intent.getStringExtra("routesIdsOnly").split("[#]");
         for (String s: routes) {
             String[] j = s.split("[+]");
             routesReslver.put(j[1], j[0]);
         }
         locId = message;
+        req = new htmlRequestor();
         arrivalsFactory = new ArrivalsFactory(this);
+        vehiclesLocationFactory = new VehiclesLocationFactory(this);
+
         arrivalsFactory.getArrivalsAt(locId.split(" "));
+        vehiclesLocationFactory.getVehiclesOnRoutes(routeIdsOnly);
+        req.execute(arrivalsFactory, vehiclesLocationFactory);
         createMulticheckboxDialog(routeIDs);
 //        checkBox = (CheckBox) findViewById(R.id.cbxBox1);
 //        txtCheckBox = (TextView) findViewById(R.id.txtCheckBox);
@@ -298,10 +311,27 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
         map.setMyLocationEnabled(true);
         mMap = map;
+        centerMapOnMyLocation();
+    }
+    private void centerMapOnMyLocation() {
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+//        location = mMap.getMyLocation();
+        if (location != null)
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13)); CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                .zoom(18)                   // Sets the zoom
+                .bearing(0)                // Sets the orientation of the camera to east
+                .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+
     }
 }

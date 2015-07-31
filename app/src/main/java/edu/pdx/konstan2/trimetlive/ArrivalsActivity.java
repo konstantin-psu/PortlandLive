@@ -34,7 +34,7 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
     }
     public void execute() {
         new responseParserFactory().parseArrivals(response, arrivalsmap);
-//        tw.setText(mapToString(arrivalsmap));
+//        tw.setText(mapToString(vehiclesMap));
         mapToString(arrivalsmap);
         hideSoftKeyboard(ArrivalsActivity.this);
 

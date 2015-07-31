@@ -31,7 +31,7 @@ import java.util.Map;
 public class LiveMap extends FragmentActivity implements MasterTask {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private HashMap<Long, vehicle> vehicleMap;
+    private HashMap<Long, Vehicle> vehicleMap;
     private HashMap<LatLng, Stop> stopMap;
     private HashMap<LatLng, View> viewCache;
     private responseParserFactory responseParser;
@@ -45,14 +45,16 @@ public class LiveMap extends FragmentActivity implements MasterTask {
         viewCache = new HashMap<LatLng, View>();
     }
 
-    public void run() {
-        mMap.clear();
-        stopMap = stops.stopsMap;
-        Iterator it = stops.stopsMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            Stop v =  (Stop) pair.getValue();
-            mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
+    public void run(String command) {
+        if (command.equals("addStops")) {
+            mMap.clear();
+            stopMap = stops.stopsMap;
+            Iterator it = stops.stopsMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                Stop v = (Stop) pair.getValue();
+                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
+            }
         }
     }
 
@@ -61,7 +63,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
         super.onCreate(savedInstanceState);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         responseParser = new responseParserFactory();
-        vehicleMap = new HashMap<Long, vehicle>();
+        vehicleMap = new HashMap<Long, Vehicle>();
         stopMap = new HashMap<LatLng, Stop>();
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
@@ -99,22 +101,25 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                         Intent intent = new Intent(thisPointer, testActivity.class);
                         ArrivalsBuilder arr = new ArrivalsBuilder();
                         String routes = new String ();
+                        String routesIdsOnly = new String ();
                         String routesID = new String ();
-                        intent.putExtra("stopId", currentStop.locID);
+                        intent.putExtra("stopId", currentStop.locID.toString());
                         Iterator<Route> it = currentStop.routesIterator();
                         while(it.hasNext()) {
                             Route n = it.next();
-                            it.remove();
                             if (it.hasNext()) {
-                                routes += n.route + "+" + n.description + " ";
-                                routesID +=n.description+ " ";
+                                routes += n.route + "+" + n.description + "#";
+                                routesIdsOnly += n.route + "#";
+                                routesID +=n.description+ "+";
                             } else {
                                 routes += n.route + "+" + n.description;
                                 routesID +=n.description+ "";
+                                routesIdsOnly += n.route +"" ;
                             }
                         }
                         intent.putExtra("routes", routes);
                         intent.putExtra("routesID", routesID);
+                        intent.putExtra("routesIdsOnly", routesIdsOnly);
                         startActivity(intent);
 
                     }
@@ -145,7 +150,6 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                             tv.setPadding(10,5,10,5);
                             tv.setText(r.asString());
                             insertPoint.addView(tv);
-                            it.remove(); // avoids a ConcurrentModificationException
                         }
                         viewCache.put(stopPosition, custom);
 

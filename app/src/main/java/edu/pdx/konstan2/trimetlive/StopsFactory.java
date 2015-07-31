@@ -20,6 +20,7 @@ public class StopsFactory implements AsyncJob {
     HashMap<LatLng, Stop> stopsMap = new HashMap<LatLng, Stop>();
     StopsBuilder stopsRequest = new StopsBuilder();
     MasterTask master;
+    public static final String command = "addStops";
 
     public StopsFactory(MasterTask master) {
         this.master = master;
@@ -34,7 +35,7 @@ public class StopsFactory implements AsyncJob {
     }
     public void execute() {
         new responseParserFactory().parseStopsXML(response, stopsMap);
-        master.run();
+        master.run(command);
 
     }
 

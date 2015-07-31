@@ -45,6 +45,7 @@ public class RequestBuilder {
 
 class VehiclesLocationBuilder extends RequestBuilder {
     String version = "v2";
+    String command = "routes";
     String name = "vehicles";
     ArrayList<String> routes    = new ArrayList<String>();
     ArrayList<String> blocks = new ArrayList<String>();
@@ -72,6 +73,14 @@ class VehiclesLocationBuilder extends RequestBuilder {
     }
     public String base() {
         return simple()+version+separator+name+separator+options.get("appID");
+    }
+
+    public String request(String [] locations) {
+        String basic = base()+separator+command;
+        for (String s: locations) {
+            basic += separator+s;
+        }
+        return basic;
     }
 
 }

@@ -1,58 +1,11 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
+package edu.pdx.konstan2.trimetlive;
 
+/**
+ * Created by konstantin on 7/5/15.
+ */
 import org.json.simple.*;
-import org.json.simple.parser.JSONParser;
 
-
-public class Main {
-
-    public static HashMap<Long, vehicle> vs = new HashMap<Long, vehicle>();
-    public static void main(String[] args) {
-        try {
-            URL url= new URL("http://developer.trimet.org/ws/v2/vehicles?appID=EEC7240AC3168C424AC5A98E1");
-            URL yahoo = url;
-            String res = new String();
-
-
-            HttpURLConnection yc = (HttpURLConnection) yahoo.openConnection();
-
-//                yc.setRequestProperty("appID", appId);
-
-//                return Integer.toString(yc.getResponseCode());
-//                return yc.toString();
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(yc.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            JSONParser parser = new JSONParser();
-            JSONObject jobj = (JSONObject) parser.parse(response.toString());
-            JSONObject v = (JSONObject) jobj.get("resultSet");
-            JSONArray arr = (JSONArray) v.get("vehicle");
-//            System.out.println(v.toString());
-            Iterator<JSONObject> iter = arr.iterator();
-            while(iter.hasNext()) {
-                vehicle t = new vehicle(iter.next());
-                vs.put(t.vehicleID, t);
-                System.out.println(t);
-
-            }
-        } catch (Exception e) {
-            System.out.println(e.toString()) ;
-        }
-    }
-}
-
-class vehicle {
+public class Vehicle {
     public Long vehicleID             ;//  Identifies the vehicle.
     public String type                  ;//  Identifies the type of vehile. Can be "bus" or "rail".
     public Long blockID               ;//  Identifies the block number of the vehicle.
@@ -81,7 +34,7 @@ class vehicle {
     public Boolean inCongestion          ;//  (Experimental)   Set to true if vehicle is reporting its not moving while in traffic. Bus only.
     public Long loadPercentage        ;//  (Experimental)     Vehicles (bus only) can report when load thresholds have been crossed. Currently there are three possible thresholds, 0%, 70% and 90%. These thresholds may change so values 0 to 100 may be possible.
 
-    public vehicle (JSONObject v) {
+    public Vehicle(JSONObject v) {
         vehicleID             = (Long) v.get("vehicleID");
         type                  = (String) v.get("type");
         blockID               = (Long) v.get("blockID");
@@ -114,32 +67,32 @@ class vehicle {
     public String toString() {
         return
                 "vehicleID            " + vehicleID
-                + "type                 " + type
-                + "blockID              " + blockID
-                + "bearing              " + bearing
-                + "serviceDate          " + serviceDate
-                + "locationInScheduleDay" + locationInScheduleDay
-                + "time                 " + time
-                + "expires              " + expires
-                + "longitude            " + longitude
-                + "latitude             " + latitude
-                + "routeNumber          " + routeNumber
-                + "direction            " + direction
-                + "tripID               " + tripID
-                + "newTrip              " + newTrip
-                + "delay                " + delay
-                + "messageCode          " + messageCode
-                + "signMessage          " + signMessage
-                + "signMessageLong      " + signMessageLong
-                + "nextLocID            " + nextLocID
-                + "nextStopSeq          " + nextStopSeq
-                + "lastLocID            " + lastLocID
-                + "lastStopSeq          " + lastStopSeq
-                + "garage               " + garage
-                + "extrablockID         " + extrablockID
-                + "offRoute             " + offRoute
-                + "inCongestion         " + inCongestion
-                + "loadPercentage       " + loadPercentage;
+                        + "type                 " + type
+                        + "blockID              " + blockID
+                        + "bearing              " + bearing
+                        + "serviceDate          " + serviceDate
+                        + "locationInScheduleDay" + locationInScheduleDay
+                        + "time                 " + time
+                        + "expires              " + expires
+                        + "longitude            " + longitude
+                        + "latitude             " + latitude
+                        + "routeNumber          " + routeNumber
+                        + "direction            " + direction
+                        + "tripID               " + tripID
+                        + "newTrip              " + newTrip
+                        + "delay                " + delay
+                        + "messageCode          " + messageCode
+                        + "signMessage          " + signMessage
+                        + "signMessageLong      " + signMessageLong
+                        + "nextLocID            " + nextLocID
+                        + "nextStopSeq          " + nextStopSeq
+                        + "lastLocID            " + lastLocID
+                        + "lastStopSeq          " + lastStopSeq
+                        + "garage               " + garage
+                        + "extrablockID         " + extrablockID
+                        + "offRoute             " + offRoute
+                        + "inCongestion         " + inCongestion
+                        + "loadPercentage       " + loadPercentage;
     }
-
 }
+
