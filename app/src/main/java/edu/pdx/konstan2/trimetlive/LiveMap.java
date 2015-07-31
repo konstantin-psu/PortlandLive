@@ -31,18 +31,15 @@ import java.util.Map;
 public class LiveMap extends FragmentActivity implements MasterTask {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private HashMap<Long, Vehicle> vehicleMap;
     private HashMap<LatLng, Stop> stopMap;
     private HashMap<LatLng, View> viewCache;
-    private responseParserFactory responseParser;
-    private LocationManager locationManager;
     final StopsFactory stops;
     LiveMap thisPointer = this;
 
 
     public LiveMap() {
         stops = new StopsFactory(this);
-        viewCache = new HashMap<LatLng, View>();
+        viewCache = new HashMap<>();
     }
 
     public void run(String command) {
@@ -61,14 +58,8 @@ public class LiveMap extends FragmentActivity implements MasterTask {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        responseParser = new responseParserFactory();
-        vehicleMap = new HashMap<Long, Vehicle>();
-        stopMap = new HashMap<LatLng, Stop>();
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        stopMap = new HashMap<>();
 
-        // Create the text view
         setContentView(R.layout.activity_live_map);
         setUpMapIfNeeded();
 
@@ -99,22 +90,21 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                         Stop currentStop = stopMap.get(position);
 
                         Intent intent = new Intent(thisPointer, testActivity.class);
-                        ArrivalsBuilder arr = new ArrivalsBuilder();
-                        String routes = new String ();
-                        String routesIdsOnly = new String ();
-                        String routesID = new String ();
+                        String routes = "";
+                        String routesIdsOnly = "";
+                        String routesID = "" ;
                         intent.putExtra("stopId", currentStop.locID.toString());
                         Iterator<Route> it = currentStop.routesIterator();
-                        while(it.hasNext()) {
+                        while (it.hasNext()) {
                             Route n = it.next();
                             if (it.hasNext()) {
                                 routes += n.route + "+" + n.description + "#";
                                 routesIdsOnly += n.route + "#";
-                                routesID +=n.description+ "+";
+                                routesID += n.description + "+";
                             } else {
                                 routes += n.route + "+" + n.description;
-                                routesID +=n.description+ "";
-                                routesIdsOnly += n.route +"" ;
+                                routesID += n.description + "";
+                                routesIdsOnly += n.route + "";
                             }
                         }
                         intent.putExtra("routes", routes);
@@ -144,10 +134,10 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                         LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
                         Stop stop = stopMap.get(stopPosition);
                         Iterator<Route> it = stop.routesIterator();
-                        while(it.hasNext()) {
-                            Route r = (Route)it.next();
+                        while (it.hasNext()) {
+                            Route r = it.next();
                             TextView tv = new TextView(getApplicationContext());
-                            tv.setPadding(10,5,10,5);
+                            tv.setPadding(10, 5, 10, 5);
                             tv.setText(r.asString());
                             insertPoint.addView(tv);
                         }
@@ -187,7 +177,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
             // Check if we were successful in obtaining the map. if (mMap != null) {
-                setUpMap();
+            setUpMap();
         }
     }
 
@@ -209,14 +199,13 @@ public class LiveMap extends FragmentActivity implements MasterTask {
         Criteria criteria = new Criteria();
 
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-//        location = mMap.getMyLocation();
-        if (location != null)
-        {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(location.getLatitude(), location.getLongitude()), 13)); CameraPosition cameraPosition = new CameraPosition.Builder()
+        if (location != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
+            CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                     .zoom(18)                   // Sets the zoom
-                    .bearing(0)                // Sets the orientation of the camera to east
-                    .tilt(0)                   // Sets the tilt of the camera to 30 degrees
+                    .bearing(0)                 // Sets the orientation of the camera to east
+                    .tilt(0)                    // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
@@ -224,16 +213,4 @@ public class LiveMap extends FragmentActivity implements MasterTask {
         }
 
     }
-
-
-//    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
-//        @Override
-//        public void onMyLocationChange(Location location) {
-//            LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
-//            Marker mMarker = mMap.addMarker(new MarkerOptions().position(loc));
-//            if(mMap != null){
-//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 16.0f));
-//            }
-//        }
-//    };
 }

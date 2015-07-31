@@ -1,13 +1,10 @@
 package edu.pdx.konstan2.trimetlive;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Created by kmacarenco on 7/21/15.
@@ -71,8 +68,12 @@ class Arrival {
     String vehicleID;
     ArrayList<Route> routes = new ArrayList<>();
     public String asString() {
-        Date expiry = new Date(scheduled);
-        return shortSign +" " + expiry.toString();
+        Date scheduled = new Date(this.scheduled);
+        Date estimated = new Date(this.estimated);
+        if (estimated != null)
+            return shortSign +" " + scheduled.toString()+" estimated at "+estimated.toString();
+        else
+            return shortSign +" " + scheduled.toString();
     }
     public Arrival(JSONObject v) {
         id              = (String) v.get("id");

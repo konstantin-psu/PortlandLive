@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/arrival_view_compostion"
+    android:padding="3dip"
     android:orientation="vertical" >
 
     <!--<LinearLayout-->

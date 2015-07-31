@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -80,6 +81,8 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
             TextView tv = new TextView(this);
             Arrival arrival = (Arrival) pair.getValue();
             tv.setText(((Arrival) pair.getValue()).asString());
+            tv.setTextColor(Color.LTGRAY);
+            tv.setLineSpacing(5,1);
             insertPoint.addView(tv);
 //            if (itemsSelected.contains(arrival.route)) {
 //                mMap.
