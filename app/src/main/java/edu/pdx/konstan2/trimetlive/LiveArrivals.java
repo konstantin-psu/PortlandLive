@@ -5,11 +5,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,11 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,6 +23,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -38,43 +32,31 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-public class testActivity extends FragmentActivity implements OnMapReadyCallback, MasterTask {
+public class LiveArrivals extends FragmentActivity implements OnMapReadyCallback, MasterTask {
     GoogleMap mMap;
-    Handler handler = new Handler();
     String locId;
-    String route;
     ArrivalsFactory arrivalsFactory;
     VehiclesLocationFactory vehiclesLocationFactory;
-    ArrayList<String> routes;
 
     final ArrayList itemsSelected;
 
-    private CheckBox checkBox;
-    private TextView txtCheckBox, txtRadio;
-    private RadioButton rb1, rb2, rb3;
-    private Spinner spnMusketeers;
     private HashMap<String, String> routesReslver;
     private htmlRequestor req;
 
-    Runnable runnable = new Runnable() {
-        public void run() {
-            afficher();
-        }
-    };
 
-    public testActivity() {
+    public LiveArrivals() {
         itemsSelected = new ArrayList();
 
     }
 
-    public void mapToString(Map<String, Arrival> arr) {
+    public void addArrivals(Map<String, Arrival> arr) {
         ArrivalsViewBuilder arrivalsViewBuilder = new ArrivalsViewBuilder();
         arrivalsViewBuilder.buildView(arrivalsFactory, this);
 
     }
     public void run(String methodName) {
         if (methodName.equals(ArrivalsFactory.command)) {
-            mapToString(arrivalsFactory.arrivalsmap);
+            addArrivals(arrivalsFactory.arrivalsmap);
         } else if (methodName.equals(VehiclesLocationFactory.command)) {
             addVehiclesLocations();
         }
@@ -99,7 +81,7 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_live_arrivals);
         MapFragment mapFragment = (MapFragment) getFragmentManager() .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         Intent intent = getIntent();
@@ -203,6 +185,36 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
         map.setMyLocationEnabled(true);
         mMap = map;
         centerMapOnMyLocation();
+        mMap.setInfoWindowAdapter(
+                new GoogleMap.InfoWindowAdapter() {
+                    @Override
+                    public View getInfoWindow(Marker arg0) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker arg0) {
+                        LatLng stopPosition = arg0.getPosition();
+                        Vehicle vehicle = vehiclesLocationFactory.vehiclesMap.get(stopPosition);
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+                        VehicleInfoWindowBuilder vehicleInfoWindowBuilder =new VehicleInfoWindowBuilder();
+                        return  vehicleInfoWindowBuilder.buildView(vehicle, inflater);
+                    }
+                }
+        );
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (marker.isVisible() && !marker.isInfoWindowShown()) {
+                    marker.showInfoWindow();
+                }
+                return true;
+            }
+        });
     }
     private void centerMapOnMyLocation() {
 
@@ -215,7 +227,7 @@ public class testActivity extends FragmentActivity implements OnMapReadyCallback
         {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13)); CameraPosition cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                .zoom(18)                   // Sets the zoom
+                .zoom(10)                   // Sets the zoom
                 .bearing(0)                // Sets the orientation of the camera to east
                 .tilt(0)                   // Sets the tilt of the camera to 30 degrees
                 .build();                   // Creates a CameraPosition from the builder

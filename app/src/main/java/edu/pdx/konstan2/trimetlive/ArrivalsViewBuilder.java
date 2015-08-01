@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,7 +24,7 @@ public class ArrivalsViewBuilder {
         Iterator it = arrivalsFactory.arrivalsmap.entrySet().iterator();
 
         LayoutInflater inflater = (LayoutInflater) a.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        LinearLayout displayPlace = (LinearLayout) a.findViewById(R.id.arrivals_insert_point);
+        LinearLayout displayPlace = (LinearLayout) a.findViewById(R.id.view_insert_point);
 
         View custom = inflater.inflate(R.layout.insertable, null);
         LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);

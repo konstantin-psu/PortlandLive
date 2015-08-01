@@ -6,8 +6,8 @@
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
     <string name="button_test">Test</string>
-    <string name="button_mapTest">callMap</string>
-    <string name="button_arrivals">Arrivals</string>
+    <string name="show_nearby_stops">Show nearby stops</string>
+    <string name="button_arrivals">Get arrivals by id</string>
     <string name="title_activity_map">mapActivity</string>
     <string name="title_activity_live_map">Map</string>
     <string name="title_activity_arrivals">ArrivalsActivity</string>

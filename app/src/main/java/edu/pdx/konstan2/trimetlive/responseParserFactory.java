@@ -26,7 +26,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class responseParserFactory {
-    public void parseVehiclesLocationJSON(String response, HashMap<Long, Vehicle> vMap) {
+    public void parseVehiclesLocationJSON(String response, HashMap<LatLng, Vehicle> vMap) {
         try {
             JSONParser parser = new JSONParser();
             JSONObject jobj = (JSONObject) parser.parse(response.toString());
@@ -35,7 +35,7 @@ public class responseParserFactory {
             Iterator<JSONObject> iter = arr.iterator();
             while(iter.hasNext()) {
                 Vehicle t = new Vehicle(iter.next());
-                vMap.put(t.vehicleID, t);
+                vMap.put(new LatLng(t.latitude, t.longitude), t);
             }
         } catch (Exception e) {
         }

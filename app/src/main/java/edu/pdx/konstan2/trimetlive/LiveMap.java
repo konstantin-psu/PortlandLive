@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -89,7 +90,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                         LatLng position = marker.getPosition();
                         Stop currentStop = stopMap.get(position);
 
-                        Intent intent = new Intent(thisPointer, testActivity.class);
+                        Intent intent = new Intent(thisPointer, LiveArrivals.class);
                         intent.putExtra("stopJsonEncoded", currentStop.toEncodedString());
                         startActivity(intent);
                     }

@@ -34,7 +34,7 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
     }
     public void execute() {
         new responseParserFactory().parseArrivals(response, arrivalsmap);
-//        tw.setText(mapToString(vehiclesMap));
+//        tw.setText(addArrivals(vehiclesMap));
         mapToString(arrivalsmap);
         ArrivalsViewBuilder arrivalsViewBuilder = new ArrivalsViewBuilder();
 //        arrivalsViewBuilder.buildView();

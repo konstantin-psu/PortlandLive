@@ -1,5 +1,7 @@
 package edu.pdx.konstan2.trimetlive;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.HashMap;
 
 /**
@@ -8,7 +10,7 @@ import java.util.HashMap;
 public class VehiclesLocationFactory implements AsyncJob {
     String url;
     String response;
-    HashMap<Long, Vehicle> vehiclesMap;
+    HashMap<LatLng, Vehicle> vehiclesMap;
     VehiclesLocationBuilder vehiclesLocationBuilder = new VehiclesLocationBuilder();
     MasterTask master;
     public final static String command = "addVehiclesLocations";

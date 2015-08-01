@@ -33,6 +33,7 @@ public class Vehicle {
     public Boolean offRoute              ;//  Placeholder for future. Set to true if the vehicle reported that it has gone off route.
     public Boolean inCongestion          ;//  (Experimental)   Set to true if vehicle is reporting its not moving while in traffic. Bus only.
     public Long loadPercentage        ;//  (Experimental)     Vehicles (bus only) can report when load thresholds have been crossed. Currently there are three possible thresholds, 0%, 70% and 90%. These thresholds may change so values 0 to 100 may be possible.
+    int icon;
 
     public Vehicle(JSONObject v) {
         vehicleID             = (Long) v.get("vehicleID");
@@ -62,6 +63,12 @@ public class Vehicle {
         offRoute              = (Boolean) v.get("offRoute");
         inCongestion          = (Boolean) v.get("inCongestion");
         loadPercentage        = (Long) v.get("loadPercentage");
+
+        if (type == "B") {
+            icon = R.drawable.bus4;
+        } else {
+            icon = R.drawable.ic_directions_transit_black_24px;
+        }
     }
 
     public String toString() {

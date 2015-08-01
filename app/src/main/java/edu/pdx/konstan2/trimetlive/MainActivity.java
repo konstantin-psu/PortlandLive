@@ -2,12 +2,10 @@ package edu.pdx.konstan2.trimetlive;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 
 
 public class MainActivity extends Activity {
@@ -23,7 +21,7 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
     public void callTest(View view) {
-        Intent intent = new Intent(this, testActivity.class);
+        Intent intent = new Intent(this, LiveArrivals.class);
         ArrivalsBuilder arr = new ArrivalsBuilder();
         String [] a= "8381".split(" ");
         intent.putExtra("stopId", "8381");

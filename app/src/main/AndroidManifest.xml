@@ -59,7 +59,7 @@
                 android:value="edu.pdx.konstan2.trimetlive.MainActivity" />
         </activity>
         <activity
-            android:name=".testActivity"
+            android:name=".LiveArrivals"
             android:label="@string/title_activity_test"
             android:parentActivityName=".MainActivity" >
             <meta-data
