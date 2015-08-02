@@ -5,6 +5,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.ArrayList;
+
 /**
  * Created by kmacarenco on 7/27/15.
  */
@@ -13,6 +15,7 @@ public class Route {
     Long route;
     String description;
     Long direction;
+    ArrayList<Dir> directions = new ArrayList<>();
     String dirDescription;
     public String toJsonString() {
         StringBuilder str = new StringBuilder("{");
@@ -35,6 +38,20 @@ public class Route {
                 Element dir = (Element) node1;
                 dirDescription = dir.getAttribute("desc");
                 direction = Long.parseLong(dir.getAttribute("dir"));
+            }
+        }
+    }
+
+    public Route (Element v, Boolean includeStops) {
+        route =   Long.parseLong(v.getAttribute("route"));
+        type =   v.getAttribute("type");
+        description = v.getAttribute("desc");
+        NodeList routesList = v.getElementsByTagName("dir");
+        for (int count = 0; count < routesList.getLength(); count++) {
+            Node node1 = routesList.item(count);
+            if (node1.getNodeType() == node1.ELEMENT_NODE) {
+                Element dir = (Element) node1;
+                directions.add(new Dir(dir, includeStops));
             }
         }
     }

@@ -45,7 +45,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
     final RoutesFactory routesFactory;
     private ArrayList<Long> selectedRoutes;
     LiveMap thisPointer = this;
-    private htmlRequestor req;
+    private HtmlRequestor req;
 
 
     public LiveMap() {
@@ -96,7 +96,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-                req = new htmlRequestor();
+                req = new HtmlRequestor();
                 stops.getStopsAtBounds(new Bbox(bounds));
                 req.execute(stops);
             }
@@ -158,7 +158,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                     }
                 }
         );
-        htmlRequestor tempReq = new htmlRequestor();
+        HtmlRequestor tempReq = new HtmlRequestor();
         routesFactory.getAllRoutes();
         tempReq.execute(routesFactory);
     }

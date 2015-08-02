@@ -41,6 +41,10 @@ public class RequestBuilder {
     public String basic() {
         return options.get("base");
     }
+
+    public String addOption(String url, String option) {
+        return url+separator+option;
+    }
 }
 
 class VehiclesLocationBuilder extends RequestBuilder {
@@ -137,7 +141,7 @@ class RoutesBuilder extends RequestBuilder {
         super();
         options.put("json", "false");
         options.put("stops", "stops/true");
-        options.put("dir", "true");
+        options.put("dir", "dir/true");
     }
     public String request(String [] locations) {
         String basic = base()+separator+command;
@@ -147,14 +151,30 @@ class RoutesBuilder extends RequestBuilder {
         return basic;
     }
 
+    public String request(String [] locations, Boolean includeStops) {
+
+        String basic = request(locations);
+        basic = addOption(basic, options.get("dir"));
+        if (includeStops) {
+            basic = addOption(basic, options.get("stops"));
+        }
+
+        return basic;
+    }
+
     public String request() {
         String basic = base();
         return basic;
     }
     public String request(Boolean stops) {
-        String basic = base()+separator+options.get("stops");
+        String basic = base();
+        basic = addOption(basic, options.get("dir"));
+        if (stops) {
+            basic = addOption(basic, options.get("stops"));
+        }
         return basic;
     }
+
 
     public String base() {
         return simple()+version+separator+name+separator+options.get("appID");

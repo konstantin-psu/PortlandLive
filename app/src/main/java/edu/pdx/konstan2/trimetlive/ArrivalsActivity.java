@@ -73,7 +73,7 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
         url = arrivals.request(message.split(","));
 
         responseParserFactory parser = new responseParserFactory();
-        htmlRequestor req = new htmlRequestor();
+        HtmlRequestor req = new HtmlRequestor();
         req.execute(this);
 
 //        tw.setText(url);

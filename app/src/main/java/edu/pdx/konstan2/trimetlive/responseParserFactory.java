@@ -110,7 +110,7 @@ public class responseParserFactory {
         }
     }
 
-    public void parseRoutesXML(String response, HashMap<Long, Route> routesMap) {
+    public void parseRoutesXML(String response, HashMap<Long, Route> routesMap, Boolean includeStops) {
         try {
             DocumentBuilderFactory dbFactory =
                     DocumentBuilderFactory.newInstance();
@@ -125,7 +125,7 @@ public class responseParserFactory {
                 Node nNode = nList.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    Route r = new Route(eElement);
+                    Route r = new Route(eElement, includeStops);
                     routesMap.put(r.route, r);
                 }
             }

@@ -41,7 +41,7 @@ public class LiveArrivals extends FragmentActivity implements OnMapReadyCallback
     final ArrayList itemsSelected;
 
     private HashMap<String, String> routesReslver;
-    private htmlRequestor req;
+    private HtmlRequestor req;
 
 
     public LiveArrivals() {
@@ -93,7 +93,7 @@ public class LiveArrivals extends FragmentActivity implements OnMapReadyCallback
             routesReslver.put(r.description, r.route.toString());
         }
         locId = myStop.locID.toString();
-        req = new htmlRequestor();
+        req = new HtmlRequestor();
         arrivalsFactory = new ArrivalsFactory(this);
         vehiclesLocationFactory = new VehiclesLocationFactory(this);
 

@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
+    <uses-sdk android:minSdkVersion="8"
+        android:targetSdkVersion="8"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -65,6 +68,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.pdx.konstan2.trimetlive.MainActivity" />
+        </activity>
+        <activity
+            android:name=".SelectByRoutesActivity"
+            android:label="@string/title_activity_select_by_routes"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.pdx.konstan2.trimetlive.MainActivity" />
+        </activity>
+        <activity
+            android:name=".StopsPickerActivity"
+            android:label="@string/title_activity_stops_picker" >
         </activity>
     </application>
 

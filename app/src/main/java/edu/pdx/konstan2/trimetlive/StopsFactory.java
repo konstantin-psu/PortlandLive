@@ -162,31 +162,28 @@ class Stop {
                 routes.add(new Route(route));
             }
         }
-
-//        serviceDate           = (Long) v.get("serviceDate");
-//        locationInScheduleDay = (Long) v.get("locationInScheduleDay");
-//        time                  = (Long) v.get("time");
-//        expires               = (Long) v.get("expires");
-//        longitude             = (Double) v.get("longitude");
-//        latitude              = (Double) v.get("latitude");
-//        routeNumber           = (Long) v.get("routeNumber");
-//        direction             = (Long) v.get("direction");
-//        tripID                = (String) v.get("tripID");
-//        newTrip               = (Boolean) v.get("newTrip");
-//        delay                 = (Long) v.get("delay");
-//        messageCode           = (Long) v.get("messageCode");
-//        signMessage           = (String) v.get("signMessage");
-//        signMessageLong       = (String) v.get("signMessageLong");
-//        nextLocID             = (Long) v.get("nextLocID");
-//        nextStopSeq           = (Long) v.get("nextStopSeq");
-//        lastLocID             = (Long) v.get("lastLocID");
-//        lastStopSeq           = (Long) v.get("lastStopSeq");
-//        garage                = (String) v.get("garage");
-//        extrablockID          = (Long) v.get("extrablockID");
-//        offRoute              = (Boolean) v.get("offRoute");
-//        inCongestion          = (Boolean) v.get("inCongestion");
-//        loadPercentage        = (Long) v.get("loadPercentage");
     }
 
+    public Stop (Element v, Boolean skipRoutes) {
+        xmlRepresentation = v;
+        locID = Long.parseLong(v.getAttribute("locid"));
+        direction                  = v.getAttribute("dir");
+        longitude = Double.parseDouble(v.getAttribute("lng"));
+        latitude = Double.parseDouble(v.getAttribute("lat"));
+        description = v.getAttribute("desc");
+//        blockID               = (Long) v.get("blockID");
+//        bearing               = (Long) v.get("bearing");
+
+        if (!skipRoutes) {
+            NodeList routesList = v.getElementsByTagName("route");
+            for (int count = 0; count < routesList.getLength(); count++) {
+                Node node1 = routesList.item(count);
+                if (node1.getNodeType() == node1.ELEMENT_NODE) {
+                    Element route = (Element) node1;
+                    routes.add(new Route(route));
+                }
+            }
+        }
+    }
 
 }

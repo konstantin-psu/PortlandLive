@@ -14,7 +14,7 @@ import java.util.Iterator;
 /**
  * Created by kmacarenco on 7/21/15.
  */
-public class htmlRequestor extends AsyncTask<AsyncJob , Void, ArrayList<AsyncJob>> {
+public class HtmlRequestor extends AsyncTask<AsyncJob , Void, ArrayList<AsyncJob>> {
     private Exception exception;
 
     protected ArrayList<AsyncJob> doInBackground(AsyncJob... urls) {

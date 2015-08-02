@@ -6,6 +6,7 @@
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
     <string name="button_test">Test</string>
+    <string name="button_find_by_route">Find by route</string>
     <string name="show_nearby_stops">Show nearby stops</string>
     <string name="button_arrivals">Get arrivals by id</string>
     <string name="title_activity_map">mapActivity</string>
@@ -22,4 +23,6 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_select_by_routes">SelectByRoutesActivity</string>
+    <string name="title_activity_stops_picker">StopsPickerActivity</string>
 </resources>

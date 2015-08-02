@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+android:layout_width="match_parent"
+android:background="@drawable/arrival_view_compostion"
+android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:background="@drawable/arrival_view_compostion"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="Route ID"
+            />
+        <TextView
+            android:id="@+id/Id"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="1000"
+            />
+    </LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:background="@drawable/arrival_view_compostion"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/Sign"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="Sign"
+        />
+        <TextView
+            android:id="@+id/Type"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            />
+    </LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:background="@drawable/arrival_view_compostion"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="Direction 1"
+            android:layout_width="0dp"
+            android:layout_gravity="right"
+            android:textAlignment="gravity"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:id="@+id/DirectionSign"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="TO someplace"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:background="@drawable/arrival_view_compostion"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="Direction 2"
+            android:layout_gravity="right"
+            android:textAlignment="gravity"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:id="@+id/DirectionSign1"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="TO someplace"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            />
+    </LinearLayout>
+</LinearLayout>

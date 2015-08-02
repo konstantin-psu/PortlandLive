@@ -1,7 +1,5 @@
 package edu.pdx.konstan2.trimetlive;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,7 +16,7 @@ public class RoutesFactory implements AsyncJob {
     ArrayList<Route> routes =  new ArrayList<>();
     RoutesBuilder routesRequest = new RoutesBuilder();
     MasterTask master;
-    public static final String command = "addRoutes";
+    public static final String COMMAND = "addRoutes";
 
     public RoutesFactory(MasterTask master) {
         this.master = master;
@@ -32,7 +30,7 @@ public class RoutesFactory implements AsyncJob {
         response = resp;
     }
     public void execute() {
-        new responseParserFactory().parseRoutesXML(response, routesMap);
+        new responseParserFactory().parseRoutesXML(response, routesMap, true);
         Map<Long, Route> treeMap = new TreeMap<>(routesMap);
         Iterator it =  treeMap.entrySet().iterator();
         while(it.hasNext()) {
@@ -40,8 +38,12 @@ public class RoutesFactory implements AsyncJob {
             Route r =(Route) pair.getValue();
             routes.add(r);
         }
-        master.run(command);
+        master.run(COMMAND);
 
+    }
+
+    public void getRoutes(String [] routes, Boolean includeStops) {
+        url = routesRequest.request(routes, includeStops);
     }
 
     public void getRoutes(String [] routes) {
@@ -49,6 +51,10 @@ public class RoutesFactory implements AsyncJob {
     }
     public void getAllRoutes() {
         url = routesRequest.request();
+    }
+
+    public void getAllRoutesWithStops() {
+        url = routesRequest.request(false);
     }
 
     public String[] stringArray() {
