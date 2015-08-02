@@ -56,8 +56,6 @@ public class StopsFactory implements AsyncJob {
 
     public void getStopsAtBounds(Bbox bounds) {
         url = stopsRequest.request(bounds.asString());
-        htmlRequestor req = new htmlRequestor();
-        req.execute(this);
     }
 
 

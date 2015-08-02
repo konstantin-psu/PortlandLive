@@ -1,7 +1,10 @@
 package edu.pdx.konstan2.trimetlive;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
@@ -24,7 +27,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,13 +39,21 @@ public class LiveMap extends FragmentActivity implements MasterTask {
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<LatLng, Stop> stopMap;
     private HashMap<LatLng, View> viewCache;
+    private HashMap<String, Route> Routes;
+    private final ArrayList itemsSelected;
     final StopsFactory stops;
+    final RoutesFactory routesFactory;
+    private ArrayList<Long> selectedRoutes;
     LiveMap thisPointer = this;
+    private htmlRequestor req;
 
 
     public LiveMap() {
         stops = new StopsFactory(this);
         viewCache = new HashMap<>();
+        itemsSelected = new ArrayList();
+        routesFactory = new RoutesFactory(this);
+        selectedRoutes = new ArrayList<>();
     }
 
     public void run(String command) {
@@ -51,8 +64,23 @@ public class LiveMap extends FragmentActivity implements MasterTask {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
                 Stop v = (Stop) pair.getValue();
-                mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
+                if (itemsSelected.size() == 0) {
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
+                } else {
+                    Iterator rit = v.routes.iterator();
+                    while(rit.hasNext()) {
+                        Route cr = (Route) rit.next();
+                        if (routesFactory.routesMap.containsKey(cr.route) && selectedRoutes.contains(cr.route)) {
+                            mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
+                            break;
+                        }
+                    }
+
+                }
+
             }
+        } else if (command.equals("addRoutes")){
+            createMulticheckboxDialog(routesFactory.stringArray());
         }
     }
 
@@ -68,7 +96,9 @@ public class LiveMap extends FragmentActivity implements MasterTask {
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+                req = new htmlRequestor();
                 stops.getStopsAtBounds(new Bbox(bounds));
+                req.execute(stops);
             }
         });
 
@@ -128,6 +158,9 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                     }
                 }
         );
+        htmlRequestor tempReq = new htmlRequestor();
+        routesFactory.getAllRoutes();
+        tempReq.execute(routesFactory);
     }
 
     @Override
@@ -193,5 +226,47 @@ public class LiveMap extends FragmentActivity implements MasterTask {
 
         }
 
+    }
+
+    private void createMulticheckboxDialog (String [] items) {
+        final Dialog dialog;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("List arrivals for routes: ");
+        builder.setMultiChoiceItems(items, null,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int selectedItemId,
+                                        boolean isSelected) {
+                        if (isSelected) {
+                            itemsSelected.add(selectedItemId);
+                            selectedRoutes.add(routesFactory.routes.get(selectedItemId).route);
+                        } else if (itemsSelected.contains(selectedItemId)) {
+                            itemsSelected.remove(Integer.valueOf(selectedItemId));
+                            selectedRoutes.remove(routesFactory.routes.get(selectedItemId).route);
+                        }
+                    }
+                })
+                .setPositiveButton("Done!", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
+                    }
+                });
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int id) {
+//                    }
+//                });
+        dialog = builder.create();
+//        dialog.show();
+        Button btn = (Button) findViewById(R.id.routes_filter);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
     }
 }

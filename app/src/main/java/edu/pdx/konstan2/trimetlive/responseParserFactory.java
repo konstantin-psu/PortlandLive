@@ -109,4 +109,28 @@ public class responseParserFactory {
             Log.d("exception", e.toString());
         }
     }
+
+    public void parseRoutesXML(String response, HashMap<Long, Route> routesMap) {
+        try {
+            DocumentBuilderFactory dbFactory =
+                    DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+
+            InputSource is = new InputSource(new StringReader(response));
+
+            Document doc = dBuilder.parse(is);
+            doc.getDocumentElement().normalize();
+            NodeList nList = doc.getElementsByTagName("route");
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    Route r = new Route(eElement);
+                    routesMap.put(r.route, r);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
