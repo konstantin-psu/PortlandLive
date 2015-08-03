@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:id="@+id/StopOnClick"
     android:layout_width="match_parent"
     android:background="@drawable/arrival_view_compostion"
     android:layout_height="match_parent">

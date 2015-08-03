@@ -14,12 +14,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Iterator;
 
 
 public class StopsPickerActivity extends ActionBarActivity implements  MasterTask {
     private String thisDirection;
+    private StopsPickerActivity thisPointer;
     RoutesFactory routesFactory;
+
+    public StopsPickerActivity() {
+        thisPointer = this;
+    }
 
     public void run(String command) {
         if (command.equals(RoutesFactory.COMMAND)) {
@@ -94,11 +101,13 @@ public class StopsPickerActivity extends ActionBarActivity implements  MasterTas
 
         it = thisDir.stops.iterator();
         while (it.hasNext()) {
-            Stop stop = (Stop) it.next();
+            final Stop stop = (Stop) it.next();
+            stop.routes.add(thisRoute);
             View stopView = inflater.inflate(R.layout.stop, null);
 
             TextView id =      (TextView) stopView.findViewById(R.id.Id);
             TextView sign =      (TextView) stopView.findViewById(R.id.Sign);
+            LinearLayout onClickOwner = (LinearLayout) stopView.findViewById(R.id.StopOnClick);
 
             id.setTextColor(Color.LTGRAY);
             sign.setTextColor(Color.LTGRAY);
@@ -106,10 +115,18 @@ public class StopsPickerActivity extends ActionBarActivity implements  MasterTas
             id.setText(stop.locID.toString());
             sign.setText(stop.description);
 
-//            insertPoint.addView(stopView);
-            displayPlace.addView(stopView);
+            insertPoint.addView(stopView);
+            onClickOwner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(thisPointer, LiveArrivals.class);
+                    intent.putExtra("stopJsonEncoded", stop.toEncodedString());
+                    startActivity(intent);
+                }
+            });
 
         }
-//        displayPlace.addView(insertable);
+        displayPlace.addView(insertable);
     }
+
 }
