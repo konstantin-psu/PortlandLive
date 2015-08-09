@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2015. Konstantin Macarenco
+  ~
+  ~ [This program is licensed under the GPL version 3 or later.]
+  ~
+  ~ Please see the file COPYING in the source
+  ~ distribution of this software for license terms.
+  ~
+  -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
