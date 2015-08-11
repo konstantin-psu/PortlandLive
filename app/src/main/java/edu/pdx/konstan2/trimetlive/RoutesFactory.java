@@ -18,14 +18,18 @@ import java.util.TreeMap;
 
 /**
  * Created by konstantin on 8/1/15.
+ *
+ * Main class responsible for fetching storing and operating Routes information.
+ * Implements AsyncJob, since required communication with the Trimet API
+ *
  */
 public class RoutesFactory implements AsyncJob {
-    String url;
-    String response;
-    HashMap<Long, Route> routesMap = new HashMap<Long, Route>();
-    ArrayList<Route> routes =  new ArrayList<>();
-    RoutesBuilder routesRequest = new RoutesBuilder();
-    MasterTask master;
+    private String url;
+    private String response;
+    public HashMap<Long, Route> routesMap = new HashMap<>();
+    private ArrayList<Route> routes =  new ArrayList<>();
+    private RoutesUrlStringBuilder routesRequest = new RoutesUrlStringBuilder();
+    private MasterTask master;
     public static final String COMMAND = "addRoutes";
 
     public RoutesFactory(MasterTask master) {
@@ -75,5 +79,25 @@ public class RoutesFactory implements AsyncJob {
             returnBuilder.add(r.description);
         }
         return returnBuilder.toArray(new String[returnBuilder.size()]);
+    }
+
+    public boolean containsRoute(Route cr) {
+        return routesMap.containsKey(cr.route);
+    }
+
+    public Long getRouteIdById(int selectedItemId) {
+        return routes.get(selectedItemId).route;
+    }
+
+    public int size() {
+        return routes.size();
+    }
+
+    public Route get(int i) {
+        return routes.get(i);
+    }
+
+    public Iterator iterator() {
+        return routes.iterator();
     }
 }

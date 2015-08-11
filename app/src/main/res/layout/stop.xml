@@ -13,8 +13,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/StopOnClick"
+    android:background="@drawable/arrivals_activity_view_compostition"
     android:layout_width="match_parent"
-    android:background="@drawable/arrival_view_compostion"
     android:layout_height="match_parent">
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:background="@drawable/arrival_view_compostion"
         android:layout_height="wrap_content">
         <TextView
             android:layout_width="0dp"
@@ -46,7 +45,6 @@
         android:layout_width="match_parent"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:background="@drawable/arrival_view_compostion"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/Sign"

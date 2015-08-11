@@ -15,6 +15,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 /**
  * Created by konstantin on 7/26/15.
+ *
+ * Class description: BBox is a utility class. Bound box container that defines a rectangle on a map, with four points
  */
 public class Bbox {
     Double lonDown;
@@ -28,18 +30,9 @@ public class Bbox {
         this.latDown = latDown;
         this. latUp = latUp;
     }
+
     public Bbox(String locations) {
 
-    }
-    private void intialize(String [] locations) {
-
-    }
-    public String asString() {
-        return lonDown.toString()+","+latDown.toString()+","+lonUp.toString()+","+latUp.toString();
-    }
-    public String [] asStringArray() {
-        String bounds = asString();
-        return bounds.split(",");
     }
 
     public Bbox (LatLngBounds inBounds) {
@@ -50,5 +43,15 @@ public class Bbox {
         lonUp = northeast.longitude;
         latDown = southwest.latitude;
         lonDown = southwest.longitude;
+    }
+
+    // Convert to a string expected by the Trimet API
+    public String asString() {
+        return lonDown.toString()+","+latDown.toString()+","+lonUp.toString()+","+latUp.toString();
+    }
+
+    public String [] asStringArray() {
+        String bounds = asString();
+        return bounds.split(",");
     }
 }

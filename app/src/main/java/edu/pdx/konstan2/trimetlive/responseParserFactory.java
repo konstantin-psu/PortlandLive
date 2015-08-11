@@ -13,7 +13,8 @@ package edu.pdx.konstan2.trimetlive;
 /**
  * Created by kmacarenco on 7/7/15.
  *
- * Takes trimet respond as input, and parses it to JSONObject.
+ * Takes trimet respond as input, and creates required class.
+ * TODO reduce to two method: 1. That parses XML, 2. That parses JSON
  */
 
 import android.util.Log;
@@ -35,6 +36,12 @@ import org.xml.sax.InputSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+/**
+ * Each method is pretty self explanatory:
+ *  Just in case:
+ *  1. Parse string into XML or JSON object.
+ *  2. Parse XML or JSON into more structured representation.
+ */
 public class responseParserFactory {
     public void parseVehiclesLocationJSON(String response, HashMap<LatLng, Vehicle> vMap) {
         try {

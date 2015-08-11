@@ -18,31 +18,33 @@ import android.view.MenuItem;
 import android.view.View;
 
 
+/**
+ * Class description
+ *
+ *  Main Activity is created when application started.
+ *
+ *  Defines onClick methods for the three main buttons:
+ *      1. Get arrivals by id
+ *      2. Get arrival by map
+ *      3. Get arrivals by Routes
+ */
 public class MainActivity extends Activity {
-    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
     public Intent intent = null;
 
-    /** Called when the user clicks the Send button */
-    public void sendMessage(View view) {
-        Intent intent = new Intent(this, mapActivity.class);
-//        EditText editText = (EditText) findViewById(R.id.edit_message);
-//        String message = editText.getText().toString();
-//        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-    }
-    public void callTest(View view) {
+    // 1.
+    public void callArrivalsById(View view) {
         Intent intent = new Intent(this, SelectByRoutesActivity.class);
         startActivity(intent);
     }
 
+    // 2.
     public void callMap(View view) {
         intent = new Intent(this, LiveMap.class);
         startActivity(intent);
     }
 
+    // 3.
     public void callArrivalsActivity(View view) {
-//        intent = new Intent(this, ArrivalsActivity.class);
-//        startActivity(intent);
         startActivity(new Intent(this, ArrivalsActivity.class));
     }
     @Override

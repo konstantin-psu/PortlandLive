@@ -24,15 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.Iterator;
 
 
 public class StopsPickerActivity extends ActionBarActivity implements  MasterTask {
     private String thisDirection;
     private StopsPickerActivity thisPointer;
-    RoutesFactory routesFactory;
+    private RoutesFactory routesFactory;
 
     public StopsPickerActivity() {
         thisPointer = this;
@@ -57,8 +55,8 @@ public class StopsPickerActivity extends ActionBarActivity implements  MasterTas
         routesFactory =  new RoutesFactory(this);
         routesFactory.getRoutes(routeID.split(" "), true);
 
-        HtmlRequestor htmlRequestor = new HtmlRequestor();
-        htmlRequestor.execute(routesFactory);
+        HtmlRequester htmlRequester = new HtmlRequester();
+        htmlRequester.execute(routesFactory);
     }
 
     @Override
@@ -83,21 +81,32 @@ public class StopsPickerActivity extends ActionBarActivity implements  MasterTas
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     *
+     * @param routesFactory routesHolder
+     * @param a activity where view will be added
+     */
     public void buildRoutesView(RoutesFactory routesFactory, Activity a) {
 
-        if (routesFactory.routes.size() > 1) {
+        // Should do only if one route is chosen
+        if (routesFactory.size() > 1) {
+//            if (routesFactory.routes.size() > 1) {
             Toast.makeText(getApplicationContext(), "FAIL: found more than one route", Toast.LENGTH_SHORT).show();
             return;
         }
 
+
+        //Create insert point view, which is just a linear list
         LayoutInflater inflater = (LayoutInflater) a.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout displayPlace = (LinearLayout) a.findViewById(R.id.insert_point);
 
         View insertable = inflater.inflate(R.layout.insertable, null);
         LinearLayout insertPoint = (LinearLayout) insertable.findViewById(R.id.insert_point);
 
-        Route thisRoute = routesFactory.routes.get(0);
 
+        // Now we need to find a route that will be used to get Arrivals information
+        Route thisRoute = routesFactory.get(0);
         Iterator it = thisRoute.directions.iterator();
         Dir thisDir = null;
         while (it.hasNext()) {
@@ -109,7 +118,10 @@ public class StopsPickerActivity extends ActionBarActivity implements  MasterTas
         }
         assert(thisDir != null);
 
-        it = thisDir.stops.iterator();
+        // Route is found, create view with all arrivals for this route,
+        // Each Arrival should be clickable, by click we are going to open LiveArrivals activity
+        it = thisDir.iterator();
+        Boolean colorSwitch = false;
         while (it.hasNext()) {
             final Stop stop = (Stop) it.next();
             stop.routes.add(thisRoute);
@@ -118,6 +130,11 @@ public class StopsPickerActivity extends ActionBarActivity implements  MasterTas
             TextView id =      (TextView) stopView.findViewById(R.id.Id);
             TextView sign =      (TextView) stopView.findViewById(R.id.Sign);
             LinearLayout onClickOwner = (LinearLayout) stopView.findViewById(R.id.StopOnClick);
+//            if (colorSwitch)
+//                onClickOwner.setBackground(getResources().getDrawable(R.drawable.route_blue));
+//            else
+//                onClickOwner.setBackground(getResources().getDrawable(R.drawable.route_red));
+//            colorSwitch = !colorSwitch;
 
             id.setTextColor(Color.LTGRAY);
             sign.setTextColor(Color.LTGRAY);

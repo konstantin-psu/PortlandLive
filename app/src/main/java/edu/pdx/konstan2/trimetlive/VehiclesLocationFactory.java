@@ -21,7 +21,7 @@ public class VehiclesLocationFactory implements AsyncJob {
     String url;
     String response;
     HashMap<LatLng, Vehicle> vehiclesMap;
-    VehiclesLocationBuilder vehiclesLocationBuilder = new VehiclesLocationBuilder();
+    VehiclesLocationUrlStringBuilder vehiclesLocationBuilder = new VehiclesLocationUrlStringBuilder();
     MasterTask master;
     public final static String command = "addVehiclesLocations";
 

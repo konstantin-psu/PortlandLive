@@ -19,6 +19,14 @@ import java.util.ArrayList;
 
 /**
  * Created by kmacarenco on 7/27/15.
+ *
+ * Route holder.
+ * Each route consists of:
+ * type
+ * route
+ * description
+ * directions
+ *
  */
 public class Route {
     String type;
@@ -73,15 +81,6 @@ public class Route {
         dirDescription = (String) v.get("dirDesc");
         direction = (Long) v.get("dir");
 
-//        NodeList routesList = v.getElementsByTagName("dir");
-//        for (int count = 0; count < routesList.getLength(); count++) {
-//            Node node1 = routesList.item(count);
-//            if (node1.getNodeType() == node1.ELEMENT_NODE) {
-//                Element dir = (Element) node1;
-//                dirDescription = dir.getAttribute("desc");
-//                direction = Long.parseLong(dir.getAttribute("dir"));
-//            }
-//        }
     }
     public String asString() {
         if (dirDescription != null) {

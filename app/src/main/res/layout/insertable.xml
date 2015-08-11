@@ -13,8 +13,8 @@
     android:id="@+id/insert_point"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/arrival_view_compostion"
-    android:padding="3dip"
+    android:background="@drawable/arrivals_activity_view_compostition"
+    android:padding="30dp"
     android:orientation="vertical" >
 
     <!--<LinearLayout-->

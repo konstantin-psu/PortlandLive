@@ -40,12 +40,10 @@ public class mapActivity extends Activity {
 
         // Get the message from the intent
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
         // Create the text view
         TextView textView = new TextView(this);
         textView.setTextSize(10);
-        textView.setText(message);
         connector test = new connector();
         try {
             test.test2();

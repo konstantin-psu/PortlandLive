@@ -18,7 +18,7 @@
     <string name="button_test">Test</string>
     <string name="button_find_by_route">Find by route</string>
     <string name="show_nearby_stops">Show nearby stops</string>
-    <string name="button_arrivals">Get arrivals by id</string>
+    <string name="button_arrivals">Get arrivals by stop id</string>
     <string name="title_activity_map">mapActivity</string>
     <string name="title_activity_live_map">Map</string>
     <string name="title_activity_arrivals">ArrivalsActivity</string>

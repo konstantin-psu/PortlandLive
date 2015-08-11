@@ -10,11 +10,12 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/arrival_view_compostion"
+    android:background="@drawable/arrivals_activity_view_compostition"
+    android:padding="60dp"
     android:orientation="vertical"
+
     android:weightSum="1">
     <!--<EditText android:id="@+id/edit_message"-->
         <!--android:layout_weight="1"-->
@@ -29,22 +30,22 @@
         <!--android:onClick="sendMessage" />-->
 
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <EditText android:id="@+id/edit_message"
-            android:layout_weight="3"
-            android:layout_width="0dp"
-            android:textColor="@drawable/dark_button_composition"
-            android:textColorHint="@drawable/dark_button_composition"
-            android:inputType="number"
-            android:layout_height="wrap_content"
-            android:hint="@string/stopIdHing" />
-        android:maxLines = "1"
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+        <!--<EditText android:id="@+id/edit_message"-->
+            <!--android:layout_weight="3"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:textColor="@drawable/dark_button_composition"-->
+            <!--android:textColorHint="@drawable/dark_button_composition"-->
+            <!--android:inputType="number"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="@string/stopIdHing" />-->
+        <!--android:maxLines = "1"-->
 
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
     <!--android:background="@drawable/layout_border"-->
     <!--android:background="?android:attr/selectableItemBackground"-->
 
@@ -53,6 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.32"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/button_arrivals"
         android:textColor="@drawable/dark_button_composition"
         android:background="@drawable/button_background_custom"
@@ -66,20 +69,25 @@
     <Button android:id="@+id/callMap"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/show_nearby_stops"
         android:background="@drawable/button_background_custom"
         android:textColor="@drawable/dark_button_composition"
         android:onClick="callMap"
-        android:layout_weight="0.32" />
+        android:layout_weight="0.32"
+        />
 
     <Button android:id="@+id/testCall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/button_find_by_route"
         android:background="@drawable/button_background_custom"
         android:textColor="@drawable/dark_button_composition"
-        android:onClick="callTest"
+        android:onClick="callArrivalsById"
         android:enabled="true"
         android:layout_weight="0.32" />
 
-</LinearLayout>
+    </LinearLayout>

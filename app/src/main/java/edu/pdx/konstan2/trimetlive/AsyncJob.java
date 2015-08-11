@@ -12,6 +12,12 @@ package edu.pdx.konstan2.trimetlive;
 
 /**
  * Created by kmacarenco on 7/21/15.
+ *
+ * Interface for any class that desires to communicate with a Web API
+ * AsyncJob is expected to have urlStirng, and response String.
+ * and also execute() method which is basically just a trigger that lets the Class know
+ * that request has been completed
+ *
  */
 public interface AsyncJob {
     public String url();

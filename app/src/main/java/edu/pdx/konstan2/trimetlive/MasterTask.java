@@ -12,6 +12,13 @@ package edu.pdx.konstan2.trimetlive;
 
 /**
  * Created by konstantin on 7/26/15.
+ *
+ * Class description
+ *  In context of this application MasterTask is any activity that wants to communicate with
+ *  the web API
+ *
+ *  Web API calls run() method upon return indicating that API call is finished.
+ *
  */
 public interface MasterTask {
     public void run(String methodName);

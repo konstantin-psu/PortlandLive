@@ -12,6 +12,8 @@ package edu.pdx.konstan2.trimetlive;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -24,46 +26,70 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Class description:
+ *  Should display arrivals by stop location ID
+ *  TODO: fix color scheme
+ */
 
-public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
 
-    String url;
-    String response;
+public class ArrivalsActivity extends ActionBarActivity implements MasterTask {
+
     TextView tw;
-    HashMap <String, Arrival> arrivalsmap;
-    public String url() {
-        return  url;
-    }
+    ArrivalsFactory arrivalsFactory;
 
-    public void setResponse(String resp) {
-        response = resp;
-    }
-    public void execute() {
-        new responseParserFactory().parseArrivals(response, arrivalsmap);
-//        tw.setText(addArrivals(vehiclesMap));
-        mapToString(arrivalsmap);
-        ArrivalsViewBuilder arrivalsViewBuilder = new ArrivalsViewBuilder();
-//        arrivalsViewBuilder.buildView();
+
+
+    public void run(String command) {
         hideSoftKeyboard(ArrivalsActivity.this);
-
+        mapToString(arrivalsFactory);
     }
-    public void mapToString(Map<String, Arrival> arr) {
+
+    public void mapToString(ArrivalsFactory arrivalsFactory) {
         String result = new String();
-        Iterator it = arr.entrySet().iterator();
+        Iterator it = arrivalsFactory.iterator();
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout displayPlace = (LinearLayout) findViewById(R.id.arrivalsDispay);
+        Long epoch = System.currentTimeMillis();
         View custom = inflater.inflate(R.layout.insertable, null);
         LinearLayout insertPoint = (LinearLayout) custom.findViewById(R.id.insert_point);
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry)it.next();
+////            TextView tv = (TextView) custom.findViewById(R.id.text);
+//            TextView tv = new TextView(this);
+//            tv.setText(((Arrival) pair.getValue()).asString());
+//            insertPoint.addView(tv);
+//            it.remove(); // avoids a ConcurrentModificationException
+//        }
         while (it.hasNext()) {
+            View arrivalView = inflater.inflate(R.layout.arrival, null);
             Map.Entry pair = (Map.Entry)it.next();
-//            TextView tv = (TextView) custom.findViewById(R.id.text);
             TextView tv = new TextView(this);
+
+            TextView sign = (TextView) arrivalView.findViewById(R.id.Sign);
+            TextView estimated = (TextView) arrivalView.findViewById(R.id.Estimated);
+            TextView scheduled = (TextView) arrivalView.findViewById(R.id.Scheduled);
+
+            sign.setTextColor(Color.LTGRAY);
+            estimated.setTextColor(Color.LTGRAY);
+            scheduled.setTextColor(Color.LTGRAY);
+
+            Arrival arrival = (Arrival) pair.getValue();
+            sign.setText(arrival.fullsign);
+            estimated.setText(((arrival.estimated == null) ? "N/A": ((arrival.estimated-epoch)/(60*1000))+" min"));
+            scheduled.setText(((arrival.scheduled == null) ? "N/A":(arrival.df.format(new Date(arrival.scheduled)))));
+
             tv.setText(((Arrival) pair.getValue()).asString());
-            insertPoint.addView(tv);
+            tv.setTextColor(Color.LTGRAY);
+            tv.setLineSpacing(5,1);
+            insertPoint.addView(arrivalView);
             it.remove(); // avoids a ConcurrentModificationException
         }
         displayPlace.addView(custom);
@@ -76,15 +102,16 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
         TextView textView = new TextView(this);
         textView.setTextSize(10);
         textView.setText(message);
-        ArrivalsBuilder arrivals = new ArrivalsBuilder();
+        ArrivalsUrlStringBuilder arrivals = new ArrivalsUrlStringBuilder();
 
         TextView tw = (TextView) findViewById(R.id.displayArrivalsView);
         tw.setTextSize(20);
-        url = arrivals.request(message.split(","));
+        String [] stops = message.split(",");
 
-        responseParserFactory parser = new responseParserFactory();
-        HtmlRequestor req = new HtmlRequestor();
-        req.execute(this);
+        arrivalsFactory = new ArrivalsFactory(this);
+        arrivalsFactory.getArrivalsAt(stops);
+        HtmlRequester req = new HtmlRequester();
+        req.execute(arrivalsFactory);
 
 //        tw.setText(url);
 
@@ -97,7 +124,6 @@ public class ArrivalsActivity extends ActionBarActivity implements AsyncJob {
         setContentView(R.layout.activity_arrivals);
         tw = (TextView) findViewById(R.id.displayArrivalsView);
         tw.setMovementMethod(new ScrollingMovementMethod());
-        arrivalsmap = new HashMap<String, Arrival>();
     }
 
     @Override

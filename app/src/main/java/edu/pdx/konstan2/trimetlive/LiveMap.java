@@ -16,13 +16,8 @@ import android.content.Context;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -44,9 +39,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class LiveMap extends FragmentActivity implements MasterTask {
+public class LiveMap extends MapsCommon implements MasterTask {
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private HashMap<LatLng, Stop> stopMap;
     private HashMap<LatLng, View> viewCache;
     private HashMap<String, Route> Routes;
@@ -55,7 +49,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
     final RoutesFactory routesFactory;
     private ArrayList<Long> selectedRoutes;
     LiveMap thisPointer = this;
-    private HtmlRequestor req;
+    private HtmlRequester req;
 
 
     public LiveMap() {
@@ -80,7 +74,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                     Iterator rit = v.routes.iterator();
                     while(rit.hasNext()) {
                         Route cr = (Route) rit.next();
-                        if (routesFactory.routesMap.containsKey(cr.route) && selectedRoutes.contains(cr.route)) {
+                        if (routesFactory.containsRoute(cr) && selectedRoutes.contains(cr.route)) {
                             mMap.addMarker(new MarkerOptions().position(new LatLng(v.latitude, v.longitude)));
                             break;
                         }
@@ -106,7 +100,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
             @Override
             public void onCameraChange(CameraPosition position) {
                 LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-                req = new HtmlRequestor();
+                req = new HtmlRequester();
                 stops.getStopsAtBounds(new Bbox(bounds));
                 req.execute(stops);
             }
@@ -168,7 +162,7 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                     }
                 }
         );
-        HtmlRequestor tempReq = new HtmlRequestor();
+        HtmlRequester tempReq = new HtmlRequester();
         routesFactory.getAllRoutes();
         tempReq.execute(routesFactory);
     }
@@ -212,31 +206,14 @@ public class LiveMap extends FragmentActivity implements MasterTask {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
+        //Enable my location
         mMap.setMyLocationEnabled(true);
+
+        //1. Set map to PSU fourth avenue building location, and try to center on my location after
+        goToDefaultLocation();
         centerMapOnMyLocation();
     }
 
-
-    private void centerMapOnMyLocation() {
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-
-        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        if (location != null) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(18)                   // Sets the zoom
-                    .bearing(0)                 // Sets the orientation of the camera to east
-                    .tilt(0)                    // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-
-        }
-
-    }
 
     private void createMulticheckboxDialog (String [] items) {
         final Dialog dialog;
@@ -250,26 +227,23 @@ public class LiveMap extends FragmentActivity implements MasterTask {
                                         boolean isSelected) {
                         if (isSelected) {
                             itemsSelected.add(selectedItemId);
-                            selectedRoutes.add(routesFactory.routes.get(selectedItemId).route);
+                            selectedRoutes.add(routesFactory.getRouteIdById(selectedItemId));
                         } else if (itemsSelected.contains(selectedItemId)) {
                             itemsSelected.remove(Integer.valueOf(selectedItemId));
-                            selectedRoutes.remove(routesFactory.routes.get(selectedItemId).route);
+                            selectedRoutes.remove(routesFactory.getRouteIdById(selectedItemId));
                         }
                     }
                 })
                 .setPositiveButton("Done!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
+                        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+                        req = new HtmlRequester();
+                        stops.getStopsAtBounds(new Bbox(bounds));
+                        req.execute(stops);
                     }
                 });
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int id) {
-//                    }
-//                });
         dialog = builder.create();
-//        dialog.show();
         Button btn = (Button) findViewById(R.id.routes_filter);
 
         btn.setOnClickListener(new View.OnClickListener() {

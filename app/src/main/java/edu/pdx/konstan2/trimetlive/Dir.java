@@ -15,15 +15,36 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by konstantin on 8/1/15.
+ *
+ * Class description:
+ *  Direction container.
+ *
+ *  It is a bit convoluted due to the fact that some API calls can return
+ *  Directions that contain Stops, and Stops that contain Direction, or none of the above
+ *
+ *  To avoid circular parsing, parse stops only if "includeStops" flag is set to true
+ *
+ *  Trimet Direction Structure:
+ *
+ *  1. Direction description such as: To Hillsboro
+ *  2. Direction id (unique within a stop): 1, 2, 3 etc
+ *
  */
 public class Dir {
-    public ArrayList<Stop> stops = new ArrayList<>();
-    public String description;
-    Long direction;
 
+    private ArrayList<Stop> stops = new ArrayList<>();
+    public String description;
+    public Long direction;
+
+    /**
+     *
+     * @param dir XML representation of the direction
+     * @param includeStops This parameter is used to avoid circular parsing
+     */
     public Dir(Element dir, Boolean includeStops) {
         description = dir.getAttribute("desc");
         direction =  Long.parseLong(dir.getAttribute("dir"));
@@ -40,4 +61,7 @@ public class Dir {
         }
     }
 
+    public Iterator iterator() {
+        return stops.iterator();
+    }
 }

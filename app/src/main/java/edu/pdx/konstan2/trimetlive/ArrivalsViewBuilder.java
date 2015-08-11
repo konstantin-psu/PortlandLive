@@ -24,14 +24,21 @@ import java.util.Map;
 
 /**
  * Created by kmacarenco on 7/31/15.
+ *
+ * Class Description:
+ *  Class single responsibility is to build View For the Arrivals information
+ *
+ *  View structure is defined in arrival.xml, and gathered in insertable, which is just
+ *  a linear list
+ *
+ *
  */
 public class ArrivalsViewBuilder {
     public void buildView(ArrivalsFactory arrivalsFactory, Activity a) {
 
         Long epoch = System.currentTimeMillis();
 
-        String result = new String();
-        Iterator it = arrivalsFactory.arrivalsmap.entrySet().iterator();
+        Iterator it = arrivalsFactory.iterator();
 
         LayoutInflater inflater = (LayoutInflater) a.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout displayPlace = (LinearLayout) a.findViewById(R.id.view_insert_point);

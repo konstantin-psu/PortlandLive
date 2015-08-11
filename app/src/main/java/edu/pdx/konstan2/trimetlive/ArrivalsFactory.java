@@ -17,32 +17,46 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by kmacarenco on 7/21/15.
+ *
+ * Class description:
+ *  1. Implements AsyncJob, i.e. can interact with HtmlRequester
+ *  2. By itself is just a struct that holds arrivals information, requires master task
+ *      to perform some action on this information,  master task is this case is one of
+ *      the activities interested in arrivals information.
  */
+
 public class ArrivalsFactory implements AsyncJob {
-    String url;
-    String response;
-    HashMap<String, Arrival> arrivalsmap;
-    ArrivalsBuilder arrivalsRequest = new ArrivalsBuilder();
-    MasterTask master;
+
+    // *** In Class global variables ***
+    private String url; // Holds url to be executed by HtmlParser
+    private String response; // Response storage
+    private HashMap<String, Arrival> arrivalsMap; // Map: arrival_description -> Arrival
+    private ArrivalsUrlStringBuilder arrivalsRequest = new ArrivalsUrlStringBuilder(); // UrlRequestStringBuilder.java
+    private MasterTask master;
     public static final String command = "addArrivals";
 
     public ArrivalsFactory(MasterTask master) {
-        arrivalsmap = new HashMap<>();
+        arrivalsMap = new HashMap<>();
         this.master = master;
     }
 
+    // url setter/getter
     public String url() {
         return  url;
     }
 
+    // response setter
     public void setResponse(String resp) {
         response = resp;
     }
+
+    // by execute we will try to parse response and run master
     public void execute() {
-        new responseParserFactory().parseArrivals(response, arrivalsmap);
+        new responseParserFactory().parseArrivals(response, arrivalsMap);
         master.run(command);
 
     }
@@ -52,9 +66,13 @@ public class ArrivalsFactory implements AsyncJob {
     }
 
 
+    public Iterator iterator() {
+        return arrivalsMap.entrySet().iterator();
+    }
 }
 
-
+// Representation of Arrival.
+// FIXME: at this point is not capable of dealing with detour information.
 class Arrival {
     String id;
     Long blockID;
