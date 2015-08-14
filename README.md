@@ -57,17 +57,19 @@ The Gradle Build system will take care of all dependencies and generate all nece
 The App is designed to be simple and starghtforward.
 
 ##### Screen shots
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 2") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 3") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 4") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 5") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 6") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 7") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 8") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 9") 
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 10")
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 11")
-![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 12")
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/1.png =100x20 "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/2.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/3.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/4.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/5.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/6.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/7.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/8.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/9.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/10.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/11.png "Logo Title Text 1")
+![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/12.png "Logo Title Text 1")
+
+
 ### Contact information.
 For any question please email to <konstan2@pdx.edu>
