@@ -8,7 +8,7 @@ This program is released under The GPL v3.0 License. Please see the file COPYING
 
 ### Description.
 
-This app is transit tracker for Portland Metro Area public transportation system. That Allows you to find nearest stops and their arrivals, and live vehicles location. Live Vehcile Location is in beta development. 
+This app is transit tracker for Portland Metro Area public transportation system. That Allows you to find nearest stops and their arrivals, and live vehicles location. Live Vehicle Location is in beta development. 
 
 
 
@@ -38,11 +38,11 @@ The Gradle Build system will take care of all dependencies and generate all nece
           |--release/res/values                         # Release only version resource values
           `--main                                       # Main sources
             |-- java/edu/pdx/konstan2/PortalndLive      # Java source code location
-            |-- res                                     # Varioius values and layouts
+            |-- res                                     # Various values and layouts
             |-- AndroidManifest.xml                     # Project parameters
         |-- proguard-rules.pro                          # Main proguard config
         |-- build.gradle                                # Main build script
-    |-- COPYING                                         # license and copyright informaion
+    |-- COPYING                                         # license and copyright information
     |-- build.gradle                                    # secondary build script
     |-- gradle.properties                               # Gradle configuration file      
     |-- gradlew                                         # Unix build script wrapper
