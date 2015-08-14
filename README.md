@@ -8,17 +8,27 @@ This program is released under The GPL v3.0 License. Please see the file COPYING
 
 ### Description.
 
-This app is transit tracker for Portland Metro Area public transportation system. That Allows you to 
+This app is transit tracker for Portland Metro Area public transportation system. That Allows you to find nearest stops and their arrivals, and live vehicles location. Live Vehcile Location is in beta development. 
 ##### Features:
 Search stop by id.
 
 
 
+### Build Instructions
+##### Prerequisites
+1. Gradle
+2. Andoird SDK with API levels 19 and higher
+3. Maven
+
+##### Instructions
+The Gradle Build system will take care of all dependencies and generate all necessery configurations. The Project can be imported into Android Stution (preffered) or Eclipse.
+
+
 ### Apk location.
+ You can download compiled application at
 [Portland Live apk](https://drive.google.com/folderview?id=0B1sfVZHfid1-fkVaZVBfYkxWcjNOek9hY1doeDlkdk1MOWtMUkRGUDJyNG1WVGxkNi1nZHM&usp=sharing)
 
-### Build Instructions
-The Gradle Build system will take care of all dependencies and generate all necessery 
+
 
 ###### Directory structure
 ## Directory structure ##
