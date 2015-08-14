@@ -51,5 +51,23 @@ The Gradle Build system will take care of all dependencies and generate all nece
     |-- gradlew.bat                                     # Windows build script wrapper    
     |-- settings.gradle                                 # Graddle settings
 
+
+### Documentation.
+
+The App is designed to be simple and starghtforward.
+
+##### Screen shots
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 1") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 2") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 3") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 4") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 5") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 6") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 7") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 8") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 9") 
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 10")
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 11")
+![alt text](https://github.com/konstantin-psu/screenShots/1.png "Logo Title Text 12")
 ### Contact information.
 For any question please email to <konstan2@pdx.edu>
