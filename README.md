@@ -57,18 +57,19 @@ The Gradle Build system will take care of all dependencies and generate all nece
 The App is designed to be simple and starghtforward.
 
 ##### Screen shots
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/1.png =100x20 "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/2.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/3.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/4.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/5.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/6.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/7.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/8.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/9.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/10.png "Logo Title Text 1") 
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/11.png "Logo Title Text 1")
-![alt text](https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/12.png "Logo Title Text 1")
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/1.png width="200"  >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/2.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/3.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/4.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/5.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/6.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/7.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/8.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/9.png  width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/10.png width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/11.png width="200" >
+<img src=https://github.com/konstantin-psu/PortlandLive/blob/master/screenShots/12.png width="200" >
+
 
 
 ### Contact information.
