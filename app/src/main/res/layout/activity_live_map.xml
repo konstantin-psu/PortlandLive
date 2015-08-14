@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/map"
-    tools:context="edu.pdx.konstan2.trimetlive.LiveMap"
+    tools:context="edu.pdx.konstan2.PortlandLive.LiveMap"
     android:name="com.google.android.gms.maps.SupportMapFragment"
     />
 

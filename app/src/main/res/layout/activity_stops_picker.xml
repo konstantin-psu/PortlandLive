@@ -16,7 +16,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="@drawable/arrival_view_compostion"
-    tools:context="edu.pdx.konstan2.trimetlive.StopsPickerActivity">
+    tools:context="edu.pdx.konstan2.PortlandLive.StopsPickerActivity">
 
     <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
     <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
